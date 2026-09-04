@@ -5,7 +5,7 @@
 This repository contains my coursework and assignments for **OCN 682/MBIO 612.** 
 It includes all my weekly coursework submitted throughout the _**Fall 2026 semester**_.
 
-This repository is organized by assignment and week to help me stay organized and, hopefully, avoid destroying my laptop.  
+It is organized by assignment and week to help me stay organized and, hopefully, avoid destroying my laptop.  
 ![smiling face](360_F_1414600144_Lsa07cCp7d9NJxBj8ugJnReTNOf2xcw1.jpg)
 
 
