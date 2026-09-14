@@ -18,5 +18,3 @@ tail(weightdata) #looks at bottom 6 lines of dataframe
 view(weightdata) #opens new window to look at entire dataframe
 
 
-
-
