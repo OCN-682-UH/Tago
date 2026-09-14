@@ -17,8 +17,8 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 **_Output_**: graphs,figures, and tables generated from R-codes.
 
 **Week 2**: Scripts and Workflow. 
-[Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/data)
-[Scripts](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/script)
+[Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/data). 
+[Scripts](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/script). 
 
 **Week 3**: Intro to Plotting. 
 [Data]()
