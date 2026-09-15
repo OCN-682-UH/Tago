@@ -21,8 +21,9 @@ It is organized by assignment and week to help me stay organized and, hopefully,
  * [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/data). 
  * [Scripts](https://github.com/OCN-682-UH/Tago/tree/main/Week_02/script). 
 
-**Week 3**: Intro to Plotting
-
+**Week 3**: Intro to Plotting. 
+ * [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_03/output). 
  * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_03/script). 
+ * this took way too long but it was worth the effort:)
 
 
