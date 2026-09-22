@@ -27,6 +27,7 @@ It is organized by assignment and week to help me stay organized and, hopefully,
  * _this took way too long but it was worth the effort:)_
  
 **Week 4**: Dplyr and Tidyr Wrangling. 
+ * [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_04/data). 
  * [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_04/output). 
  * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_04/script). 
  
