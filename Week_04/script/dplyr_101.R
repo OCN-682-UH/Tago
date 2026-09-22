@@ -32,7 +32,7 @@ filter(.data = girl_penguins, sex == "female" & body_mass_g > 5000) # use Boolea
 
 filter(.data = girl_penguins, year == 2008| year == 2009) #basic with no piping
 girl_penguins |>
-  filter(year %in% c(2008,2009)) #without piping; %ni% = unction that checks if elements of one vector or value exist inside another vector; c() = join all things into vector
+  filter(year %in% c(2008,2009)) #without piping; %ni% = function that checks if elements of one vector or value exist inside another vector; c() = join all things into vector
 
 filter(.data = penguins, !island == "Dream")
 
