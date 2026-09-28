@@ -58,7 +58,7 @@ avg_cond_depth <- cond_depth |>
   facet_wrap(~avg_variables, scales = "free", 
              nrow = 3,
              labeller = as_labeller(c("mean_depth" = "Depth (m)",
-                                    "mean_salinity" = "Salinity (ppm)",
+                                    "mean_salinity" = "Salinity (psu)",
                                     "mean_temp" = "Temperature (C)"))) +
   labs(title = "Average Depth, Salinity, Temperature collected in January 2021",
        x = "Time (hh:mm)",
