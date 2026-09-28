@@ -9,7 +9,6 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 ![smiling face](360_F_1414600144_Lsa07cCp7d9NJxBj8ugJnReTNOf2xcw1.jpg)
 
 
-
 **Content**: All folders are organized by week. Each weekly folder contains sub-folders named as:
 
 **_Data_**: original data files to run R-code.  
