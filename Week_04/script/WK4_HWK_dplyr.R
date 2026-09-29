@@ -28,7 +28,7 @@ head(penguins)
 
 penguin_mean <- penguins
 
-penguin_mean |>
+penguin_mean <- penguins |>
   drop_na(sex) |>
   group_by(species, island, sex) |>
   summarise(mean_bodymass = mean (body_mass_g,na.rm = TRUE), #mean for bodymass among island, species, sex
@@ -40,7 +40,7 @@ penguin_mean |>
 penguin_plot <- penguins 
 
 penguin_plot |>
-  filter(sex == "male") |>
+  filter(sex == "male") |> #filter_out (sex == "male"); filter(sex != "male") filtering out male    
   mutate(log_bm = log(body_mass_g)) |>
   select(Spp = species, island, sex, log_bm) |>
   ggplot(aes(x = Spp, y = log_bm, color = island)) +

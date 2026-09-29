@@ -32,26 +32,17 @@ chemi_dd_clean <- chemi_dd |>
 
 head(chemi_dd_clean)
 
-#filter by fall and spring season, tide, and time 
-chemi_dd_clean|>
-  filter(Season == "Fall", Season == "Spring", Tide == "Low") #filtering vor observation
-
-glimpse(chemi_dd_clean)
-head(chemi_dd_clean)
-
+#filter by fall and spring season, tide, and time
 #pivot into long data 
-
-chemi_dd_long <- chemi_dd_clean |> 
-  pivot_longer(cols = Phosphate:Silicate,
-               names_to = "Variables",
-               values_to = "Values") 
-
-#view long data 
-head(chemi_dd_long) 
-glimpse(chemi_dd_long)
-
 #calculate summary statistics: mean, variance, SD for all variables by site, season and tide
 #export summary stat file to output 
+#tip from Mika: select specific codes to check without doing glimpse() every time 
+
+chemi_dd_long <- chemi_dd_clean|>
+  filter((Season == "FALL"| Season == "SPRING"), Tide == "Low")|> #filtering vor observation
+  pivot_longer(cols = Phosphate:Silicate,
+               names_to = "Variables",
+               values_to = "Values")
 
 chemi_dd_long |>
   group_by(Variables, Site, Season, Tide) |> #mean, SD, variance  
@@ -59,8 +50,7 @@ chemi_dd_long |>
             Param_vars = var(Values, na.rm = TRUE),
             Params_sd = sd(Values, na.rm = TRUE)) |>
   write.csv(here("Week_04","output","chemi_summary_stat.csv")) #export summary stat as csv
-
-head(chemi_dd_long)
+ 
 
 #research question:Compare the phosphate or silicate in the fall and spring during low tides?
 #make plot but not boxplot 
@@ -69,7 +59,7 @@ phosphate_silicate_plot <- ggplot(chemi_dd_long,
                                   mapping = aes(x = Variables,
                                                 y = Values,
                                                 color = Season)) + 
-  geom_point(size = 2, alpha = 0.5) + 
+  geom_point(position = "jitter") + #jitter
   facet_wrap(~Site) +
   labs (title = "Nutrient Concentrations by Site and Season",
         subtitle = "Comparing Phosphate and Silicate Levels at Maunaloa during Fall and Spring", 

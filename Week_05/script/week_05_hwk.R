@@ -1,8 +1,6 @@
 ### Homework: Week_05###
 ### Created by: Fuamai Tago 
-### Created on: 2026-09-22
-
-###purpose: 
+### Created on: 2026-09-28
 ##########################################################
 
 
@@ -53,7 +51,7 @@ avg_cond_depth <- cond_depth |>
                                  values_to = "avg_values") |>
   ggplot(aes(x = estimate_date,
              y = avg_values,
-             color = avg_variables)) + geom_jitter(size = 4, alpha = 0.6) + 
+             color = avg_variables)) + geom_jitter(size = 2, alpha = 0.6) + 
   geom_smooth(colour = "#4A708B")+
   facet_wrap(~avg_variables, scales = "free", 
              nrow = 3,
