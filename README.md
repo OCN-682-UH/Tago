@@ -33,7 +33,12 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 **Week 5**: Data wrangling: joins & dates with lubridate. 
  * [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_05/data). 
  * [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_05/output). 
- * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_05/script).  
+ * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_05/script). 
+
+**Week 6**: Intro to Quarto. 
+* [Output]()
+* [Script]()
+* [Quarto](https://01a11332-430c-3678-1f7b-0ec2f50c10a1.share.connect.posit.cloud)
  
 
 

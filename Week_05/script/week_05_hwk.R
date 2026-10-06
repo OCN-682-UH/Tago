@@ -78,3 +78,14 @@ avg_cond_depth
 ggsave(here("Week_05","output","wk_05_hwk.png"), width = 8, height = 5)
 
 
+##Advanced Plotting 
+library(patchwork) # bring plots together
+library(ggrepel) #repelling labels
+library(gganimate) #smooth animations
+library(gifski) #saving gifs
+library(plotly) #interactive animations
+library(magick) #for images
+
+
+
+

@@ -1,0 +1,14 @@
+name: quarto_2
+title: quarto_2
+username: fuamaiatago
+account: fuamaiatago
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a11332-430c-3678-1f7b-0ec2f50c10a1
+bundleId:
+url: https://connect.posit.cloud/fuamaiatago/content/01a11332-430c-3678-1f7b-0ec2f50c10a1
+version: 1
+quarto_version: 1.9.38
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE

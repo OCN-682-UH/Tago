@@ -1,0 +1,150 @@
+---
+title: "WEEK 6: QUARTO HOMEWORK"
+author: Fuamai A. Tago
+date: "October 6, 2026"
+format:
+  html:
+    code-fold: true
+    code-summary: "show code"
+    theme: cerulean
+execute:
+  warning: false
+  message: false
+---
+
+# **Introduction**
+
+From 2007 - 2009, researchers from the Palmer Long Term Ecological Research (LTER) program in Antarctica recorded data from three penguin species:_Adelie, Chinstrap, and Gentoo_. Size measurements of the bill and flipper, along with weight can be observed. In this report the [` penguins`]{.blue} data from the original [`palmerpenguins`]{.blue} package will compare the beak sizes by sex across species. 
+
+This report will objectively in order:  
+
+1. provide clean data (removing any "NA" data).  
+
+2. develop a summary table for sex and bill length, across three species.
+
+3. visualize the comparison in a plot 
+
+Prior to summarizing and developing a visual plot, we needed to clean the data. Cleaning the data is necessary to avoid incomplete records, ensuring a smooth visualization of our comparison. After this, we can create a summary table without any _'NA' warnings_.
+
+The workflow behind these outputs are documented in each code chunks below.
+
+```{r}
+#load libraries - first and always to be able to use all necessary functions
+
+library(palmerpenguins)
+library(dplyr)
+library(tidyverse)
+library(here)
+library (ggplot2)
+library(kableExtra)
+library(rsconnect)
+library(patchwork)
+
+#clean data and dropping NA in all these three categories
+
+penguins_cleaned <- penguins |>
+  drop_na(sex, bill_length_mm, body_mass_g)
+```
+After cleaning the data, the dataset we are now working with has `r nrow (penguins_cleaned)` penguins across species. 
+
+# **Summary Table**
+
+This table shows a summary of the the **average bill length, average weight,** and **sex**. 
+
+```{r}
+#| label: tbl-test1
+#| tbl-cap: "Average bill length (mm) and body mass (g) by species and sex"
+#| tbl-align: "center"
+#| echo: false
+
+#kableExtra was used to make table look much cleaner 
+
+penguins_summary <- penguins_cleaned |> 
+  group_by(species, sex) |>
+  summarise(n = n(),
+            bill_length_mean = round(mean(bill_length_mm, na.rm = TRUE), 1),
+            body_mass_mean = round(mean(body_mass_g, na.rm = TRUE), 1),
+            .groups = "drop") |>
+  kbl( col.names = c("Species", "Sex", "Sample Size", 
+                     "Avg Bill Length (mm)", "Avg Weight (g)"),
+       align = "c") |>
+  kable_classic() |>
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed",
+                                      full_width = FALSE, position = 
+                                        "center")) |>
+  row_spec(0, bold = TRUE, color = "aliceblue", background = "#2D3748")
+
+#print table output 
+penguins_summary
+```
+
+# **Results** 
+
+Figure 1 shows that Chinstrap has the highest bill length in both sex, Gentoo ranks the second and Adelie ranks the least.
+
+```{r}
+#| label: fig-test1
+#| fig-cap: "Average bill length by sex across species"
+#| fig-align: "center"
+
+ggplot(data = penguins_cleaned,
+       mapping = aes(x = sex,
+                     y = bill_length_mm,
+                     color = sex))+ 
+  geom_boxplot(linewidth = 0.5)+
+  facet_wrap(~species)+
+  labs(title = "Bill length (mm) by Sex Across Penguin Species",
+       subtitle = "Comparing bill length among Adelie, Chinstrap, and Gentoo Penguins",
+       x = "sex",
+       y = "bill length (mm)", 
+       caption = "Source: Palmer Station LTER/ palmerpenguins package")+
+  scale_color_manual(values = c("pink","black"))+ 
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+        plot.subtitle = element_text(face = "bold", size = 12, hjust = 0.5),
+        axis.title = element_text(face = "italic", size = 11, hjust = 0.5),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        legend.box.background = element_rect(fill="aliceblue",color="black"),
+        legend.text = element_text(size = 12),
+        panel.background = element_rect(fill = "aliceblue")) 
+```
+
+Figure 2 shows that both the female and male Chinstrap penguins have the similar body mass with Adelie, but the Gentoo penguins are more heavy.
+
+```{r}
+#| label: fig-test2
+#| fig-cap: "Average body mass by sex across species"
+#| fig-align: "center"
+
+ggplot(data = penguins_cleaned,
+       mapping = aes(x = sex,
+                     y = body_mass_g,
+                     color = sex))+ 
+  geom_boxplot(linewidth = 0.5)+
+  facet_wrap(~species)+
+  labs(title = "Body Mass (g) by Sex Across Penguin Species",
+       subtitle = "Comparing bodymass among Adelie, Chinstrap, and Gentoo Penguins",
+       x = "sex",
+       y = "Body Mass (g)", 
+       caption = "Source: Palmer Station LTER/ palmerpenguins package")+
+  scale_color_manual(values = c("pink","black"))+ 
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+        plot.subtitle = element_text(face = "bold", size = 12, hjust = 0.5),
+        axis.title = element_text(face = "italic", size = 11, hjust = 0.5),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        legend.box.background = element_rect(fill="aliceblue",color="black"),
+        legend.text = element_text(size = 12),
+        panel.background = element_rect(fill = "aliceblue")) 
+
+
+
+```
+
+# **Conclusion**
+
+In conclusion, although the Chinstrap penguins have the highest beak length, they are relatively similar to Adelie penguins who ranked the lowest in beak length. In terms of identification, this makes distinguishing both penguins easy. In regards to habitat and hunting, Chinstrap utilizes their long beaks to be able to hunt efficiently within the open-ocean. 
+
+
