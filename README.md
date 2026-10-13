@@ -39,6 +39,13 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_06/output)
 * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_06/script)
 * [Quarto](https://01a11332-430c-3678-1f7b-0ec2f50c10a1.share.connect.posit.cloud)
+
+**Week 7**: Intro to Mapping.  
+* [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/data)
+* [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/output)
+* [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/script)
+* [Quarto](https://connect.posit.cloud/fuamaiatago/content/01a13764-5e05-ce0e-4e7b-164de9d57b5d)
  
+
 
 
