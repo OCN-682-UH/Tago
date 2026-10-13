@@ -1,0 +1,221 @@
+---
+title: "Mapping Meteorites"
+author: "Fuamai Tago"
+date: "October 6, 2026"
+date-format: long
+title-block-banner: true
+format:
+  html:
+    toc: true 
+    toc-depth: 3
+    code-fold: true
+    code-summary: "show code"
+    theme:
+      light: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+# Introduction
+
+> "Every meteorite is a time capsule, that carries secrets from billions of years ago directly to our doorstep." — Unknown Science Communicator
+
+This report will be looking at the meteorites, both fallen and found globally, provided by the Meteoritical Society. Each collected data points recorded where and when these meteorites fell, its mass, and whether it was found or observed fallen. So the objectives for this report is to:
+
+1.  Import the meteorite dataset.
+2.  Create a spatial map pinpointing the geographical locations of the meteorites
+3.  Render and customize an interactive map for analysis
+
+We begin by loading the necessary packages in the library, and importing the dataset. Examining the data structure will give us enough information to be able to clean the observations of any "NA", and create or build our spatial visualization map.
+
+::: callout-note
+**Tip**: *Loading the necessary libraries first and foremost, will allow the rest of the codes to run smoothly.*
+:::
+
+```{r}
+#load the libraries 
+#necesarry
+
+library(tidyverse)
+library(here)
+library(maps)
+library(mapdata)
+library(mapproj)
+library(sf)
+library(viridis)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(tidyverse) #meta-package used for cleaning data for easy workflow  
+library(here) #enable easy file referencing 
+library(maptiles) #downloads tile basemaps
+library(tidyterra) #plot terra rasters in ggplot2
+library(leaflet) #create interactive maps
+library(tidygeocoder) #provides mechanisms to use free geocoding services
+library(ggspatial) #provide spatial dataframework for ggplot2; includes cartographic annotations: north arrows and scale bars
+```
+
+# Importing the Meteorite Dataset
+
+```{r}
+# importing meteorite dataset
+meteor <- read.csv(here("Week_07", "data", "meteorites.csv"))
+
+#viewing the dataset
+head(meteor, n = 5)
+```
+
+In this dataset, there are `r nrow(meteor)` rows of meteor records collected from across the world. For each observation, the dataset details the meteorite's classification, geographic location (latitude and longitude), site name, and the year the meteorites were observed and recovered.
+
+```{r}
+#clean dataset - remove all NA by using drop_na
+#convert the text coordinates to numbers by mutating 
+
+meteor_clean <- meteor |>
+   mutate(lat = as.numeric(lat),
+         long = as.numeric(long),
+         year = as.numeric(year)) |>
+  drop_na(lat, long, mass) |>
+  filter(!(lat == 0 & long == 0),
+         between(long,-180,180), #longitude between -180 and 180 longitudinal degrees
+         year <= 2016)
+
+```
+
+After cleaning the dataset, there are `r nrow(meteor_clean)` rows left. Most of the data had missing coordinates.
+
+# Meteors, Where?
+
+Build our map from the basics. Start with the basemap.
+
+```{r}
+#| label: fig-base-map
+#| fig-cap: "2D map of the world"
+#| fig-align: "center"
+#| 
+###plot a basic map
+
+world <- map_data("world") #import the world map 
+
+#plot base world map 
+ggplot(world) +
+  geom_polygon(data = world,
+               aes(x = long, y = lat,
+                   group = group),
+               fill = "gray30",
+               color = "gray90") +
+  guides(fill = "none") +
+   scale_size_continuous(labels = scales::comma) +
+  theme_minimal() +
+  theme(panel.background = element_rect(fill = "lightblue",color = NA, legend.position = "bottom", axis.text = element_text(color = "black"),
+    axis.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray80", linetype = "dashed"))) +
+   labs (title = "Basic Worldmap",
+         x = "Longitude",
+         y = "Latitude",
+        caption = "Data Source: NASA Meteoritical Bulletin - TidyTuesday (June, 2019)",
+        fill = "Mass (grams)") 
+
+
+```
+
+
+```{r}
+#| label: fig-map1
+#| fig-cap: "Global distribution of fallen and found meteorites recorded by mass (g), where green indicates lower mass and orange indicates higher mass."
+#| warning: false
+
+###creating a map 
+
+ggplot() +
+  #draws the baseline world boundaries.
+  geom_polygon(data = world,
+               aes(x = long, y = lat,
+                   group = group),
+               fill = "gray30",
+               color = "gray90",
+               linewidth = 0.1) + 
+  #overlay the data points 
+  geom_point(data = meteor_clean,
+             aes(x = long, y = lat, fill = mass),
+                 shape = 21,color = "white",
+                 size = 1.5,
+             stroke = 0.2,
+             na.rm = TRUE) +
+  #apply continuous log scale in color palette
+  #using Tableau color palette
+  scale_fill_gradient(transform = "log10", 
+                      low = "#59A14F", 
+                      high = "#F28E2B") +
+  scale_size_continuous(labels = scales::comma) +
+  #add theme styles
+  theme_minimal() +
+  theme(panel.background = element_rect(fill = "lightblue",color = NA, legend.position = "bottom", axis.text = element_text(color = "black"),
+    axis.title = element_text(face = "bold"))) +
+  #constrain geographic coordinate layouts
+  coord_map(projection = "mercator", 
+            xlim = c(-180,180)) +
+  #add titles and clean labels
+  labs (title = "Global distribution of Fallen and Found Meteorites by Mass",
+        x = "Longitude",
+        y = "Latitude",
+        caption = "Data Source: NASA Meteoritical Bulletin - TidyTuesday (June 2019)",
+        fill = "Mass (grams)")
+
+  
+```
+In @fig-map1, meteorites are plotted globally by their geographic locations and physical mass. A logarithmic color gradient is applied to the data points, where green indicates the meteorites with lower mass, while orange indicates specimens with significantly higher mass.
+
+```{r}
+#| label: fig-map2
+#| fig-cap: "Interactive map looking at the global distribution of meteorites by physical mass (g)"
+#| warning: false
+#| fig-align: "center"
+
+#customizing an interactive map using leaflet
+
+#define the color palette for mass
+#color palette is from Tableau
+pal_fall <- colorFactor(palette = c("#76B7B2",
+                                    "#E15759"),
+                        domain = meteor_clean$fall)
+
+#construct intereactive and render map with legend 
+meteor_map <- leaflet(meteor_clean) |>
+  addProviderTiles(provider = "Esri.WorldImagery") |> #select basemap 
+  addCircleMarkers(lng = ~long, #add spatial markers
+                   lat = ~lat,
+                   color = ~pal_fall(fall), #assigns your color palette function to mass
+                   radius = 5,
+                   stroke = FALSE,
+                   fillOpacity = 0.7,
+                   popup = ~paste("<strong>Site:</strong>",name, "<br",
+                                 "<strong>Status:</strong>", fall, "<br>",
+                                  "<strong>Mass:</strong>",mass)) |> #basic HTML tags that translates raw data into clean information, allowing viewers to read data instantly
+  addLegend (pal = pal_fall,#adding color to map
+             values = ~fall,
+             position = "bottomright",
+             title = "Discovery Status",
+             opacity = 0.8)
+
+meteor_map
+```
+
+@fig-map2 is an interactive map showcasing where meteorites fallen and found.
+
+# Summary Analysis
+
+Based on the data, @fig-map1 shows recovered meteorites highly concentrated in specific geographic locations such as: North America, Europe, South America, Africa, Australia, and parts of East Asia. This correlates to regions of higher population densities and terrain conditions such as: arid deserts and open plains, which is favorable for discovering fallen specimens.
+
+Applying the logarithmic mass scale, made it easier for us to differentiate the patterns without distorting the overall color scale. The Tableau color palette cleanly highlights the differences between the lower and higher mass specimens. 
+
+Meanwhile, @fig-map2 categorizes the meteorites by how they were dsicovered:  
+
+1. **Fallen meteorites** - Meteorites seen streaking through the sky and recovered right away. These are heavily clustered in historically populated areas where people were around to watch them land.
+2. **Found meteorites** - Meteorites discovered on the ground long after impact. These dominate unpopulated, arid deserts. The dry climate keeps the rocks from weathering away, making them easy to spot against the sand centuries later.
+
+Ultimately, these maps show that our meteorite records reflect human geography and dry climates rather than where space rocks actually choose to land.
+
+
+
+

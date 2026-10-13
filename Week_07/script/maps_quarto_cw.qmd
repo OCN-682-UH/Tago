@@ -1,0 +1,322 @@
+---
+title: "Introduction to Mapping"
+author: "Fuamai Tago"
+date: "October 6, 2026" 
+format:
+  html:
+    code-fold: true
+    code-summary: "show code"
+    theme: superhero
+execute:
+  warning: false
+  message: false
+---
+:::{.callout_important}
+Please view the code chunks.
+:::
+
+This classwork activity will be focusing on **MAPPING**. The main purpose is:
+
+1. create a map 
+
+2. plot a map 
+
+3. understand the features and functions for each code to develop the maps 
+
+All codes are located in code chunks, so this is definitely reproducible. Have fun to my future self and to whoever wants to use this for practice. Hope it helps!
+
+# Load the libraries 
+
+Lets load our libraries first and foremost. We need the necessary packages to be able to run our codes. 
+
+```{r}
+
+#installed the maps packages in console
+
+library(tidyverse)
+library(here)
+library(maps)
+library(mapdata)
+library(mapproj)
+```
+# Download data
+
+In this report, we will look at the population in California by county through the [popdata]{.green} from the **CApopdata.csv** file. In addition to looking at the population data, we will look at how many seastars were observed within these counties. 
+
+```{r}
+# Population in California by county
+popdata <- read_csv(here("Week_07", "data", "CApopdata.csv"))
+
+# Seastar counts at field sites in California
+stars <- read_csv(here("Week_07", "data", "stars.csv"))
+```
+
+```{r}
+world <- map_data("world")
+
+head(world)
+```
+
+Now that we have imported the data into this file, lets up our game and separate them by map, country, states, and counties. The next few code chunks will look at the map data. 
+
+```{r}
+
+#map in USA 
+usa <- map_data("usa")
+
+head(usa)
+```
+
+```{r}
+italy <- map_data("italy")
+
+head(italy)
+```
+
+```{r}
+states <- map_data("state")
+
+head(states)
+```
+
+
+```{r}
+counties <- map_data("county")
+
+head(counties)
+```
+
+# PLOT THE MAP
+
+Now lets take it up another notch and plot our map. Treat this section just like how you treat your basic plots. In this section we will focus on:  
+
+1. Create basic map using the group = group function
+
+2. Create basic map without the group = group function
+
+3. Color our basic map with different themes and use two types of projections (mercator and sinusoidal) to compare the the two map visuals. 
+
+```{r}
+
+#group - Points in the same group get connected; different groups cause ggplot to “lift the pen.”
+# without using the group = group in aesthetic is the #1 cause of "crazy line" plots 
+# using group = group in geom to set every point in geom. do not use in ggplot only in geom_polygon  
+#make a map 
+
+#| label: fig-test1
+#| fig-cap: "Basic map of the whole world in 2D"
+#| fig-align: "center"
+
+
+ggplot() +
+  geom_polygon(data = world,
+               aes(x = long, y = lat,
+                   group = group))
+```
+
+
+```{r}
+#without group = group 
+
+#| label: fig-test2
+#| fig-cap: "Basic map of the whole world in 2D without using the group function"
+#| fig-align: "center"
+
+ggplot() +
+  geom_polygon(data = world,
+               aes(x = long, y = lat))
+
+
+```
+
+```{r}
+
+#treat this map as a regular plot where we can color code
+#add color to lines and fill
+
+#| label: fig-test3
+#| fig-cap: "Basic map of the whole world in 2D with colors and using the mercator projection"
+#| fig-align: "center"
+
+
+ggplot() +
+  geom_polygon(data = world,
+               aes(x = long, y = lat,
+                   group = group,
+               fill = region),   #fill by region
+               color = "black") +
+  guides(fill = "none") + #this removes legend
+  theme(panel.background = 
+          element_rect(fill = "lightblue")) + #change theme
+  coord_map(projection = "mercator", xlim = c(-180, 180)) #change map projection; xlim looks at the x axis and tells it look from -180 deg to 180 deg
+
+```
+
+```{r}
+
+#| label: fig-test4
+#| fig-cap: "Basic map of the whole world in 2D with colors and using the sinusoidal projection"
+#| fig-align: "center"
+
+ggplot() +
+  geom_polygon(data = world,
+               aes(x = long, y = lat,
+                   group = group,
+               fill = region),   #fill by region
+               color = "black") +
+  guides(fill = "none") + #this removes legend
+  theme(panel.background = 
+          element_rect(fill = "lightblue")) + #change theme
+  coord_map(projection = "sinusoidal", xlim = c(-180, 180)) #change map projection; xlim looks at the x axis and tells it look from -180 deg to 180 deg; sinusodial projection - circular 
+```
+
+## Classwork Activity
+
+This classwork activity will be looking at the map of California by population, counties and seastars observed. Follow the code chunks to be able to reproduce something similar if interested. 
+
+```{r}
+#class activity
+#make map of California 
+
+CA_data <- states |> #rename the states data to only look at California 
+  filter(region == "california") # good to separate this code and the ggplot code
+
+```
+
+
+```{r}
+#ggplot data
+
+ggplot() +
+  geom_polygon(data = CA_data,
+               aes(x = long, y = lat,
+                   group = group,
+                   fill = "county"),
+                   color = "black") + 
+  guides(fill = "none") +
+  theme(panel.background = 
+          element_rect(fill = "lightblue")) + #change theme
+  coord_map(projection = "sinusoidal") 
+
+#theme_void removes the background, but we want a nice looking background so we are using a background 
+
+```
+
+We have our basic map, now lets be creative and add more layers such as counties and population. 
+
+```{r}
+#add multiple layers of data 
+#plotting population of every county in Cali by getting county-level polygons and joining to population data 
+
+head(counties)
+
+head(popdata)
+```
+```{r}
+#we need to join our pop data and our county data (rename county to subregion to match pop data to make it easier to join)
+
+CApop_county <- popdata |>
+  select("subregion" = County, Population) |>   # rename to match counties
+  inner_join(counties) |>
+  filter(region == "california")                 # some county names repeat in other states
+
+head(CApop_county)
+
+
+```
+
+
+## Now we plot!!
+
+```{r}
+#now we plot!!
+
+ggplot() +
+  geom_polygon(data = CApop_county, 
+               aes(x = long, y = lat,
+                   group = group,
+                   fill = Population), 
+               color = "black") +
+  theme_void() + #change theme
+  coord_map(projection = "sinusoidal") +
+  scale_fill_gradient(transform = "log10") # compresses the color scale so less populated counties are still visible
+
+```
+
+
+Beautiful! but lets add another layer to test and see how it would look like. This portion will overlay the seastar observed data collected in California. Lets load and view the [stars]{.green}. 
+
+```{r}
+#lets add another layer
+#look at the seastar counts per sqaure meters at field sites in California 
+
+head(stars)
+```
+
+TA-DA!! We created a plot similar to our basic Califoria map but now with more data plotted onto it. 
+
+
+```{r}
+#lets overlay the seastar sites
+
+ggplot () +
+  geom_polygon(data = CApop_county,
+               aes(x = long, y = lat,
+                   group = group,
+                   fill = Population),
+                 color = "black") +
+  geom_point(data = stars,
+             aes(x = long,
+                 y = lat,
+                 size = star_no)) + #size points by seastar count 
+  coord_map() +
+  theme_void() +
+  scale_fill_gradient(transform = "log10") +
+  labs(size = "# stars/m²")
+
+ggsave(here("Week_07", "output", "CApop.pdf"))
+  
+```
+# USE sf() 
+
+This section will just highlight that sf() (simple features) package. This is a package that we will need, if we are working with spatial data. This function will handle our spatial data and will specify it in simple formats, allowing us to be able to use dplyr with it. This function will come in the forms of [geom_sf()]{.blue} and [coord_sf()]{.blue}.  
+
+```{r}
+#installed sf package in console
+#sf does not need to use the group = group function
+
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+world_sf <- ne_countries(scale = "medium",
+                         returnclass = "sf")
+
+ggplot(world_sf) +
+  geom_sf(fill = "darkgray",
+          color = "white") +
+  theme_void()
+
+```
+### Projections with coord_sf()
+
+```{r}
+#coord_sf fxn handles projections using standard EPSG codes - much more rigorous than {mapproj}
+# governs the map projection
+#Robinson projection is a common course
+
+ggplot(world_sf) +
+  geom_sf(fill = "darkgray", color = "white") +
+  coord_sf(crs = "+proj=robin") + # Robinson projection
+  theme_void() +
+  labs(title = "Robinson Projection")
+
+```
+
+
+# Yay you survived!! 
+
+Classwork activity done! Hope this is helpful to future me and to others seeing this. 
+
+
+

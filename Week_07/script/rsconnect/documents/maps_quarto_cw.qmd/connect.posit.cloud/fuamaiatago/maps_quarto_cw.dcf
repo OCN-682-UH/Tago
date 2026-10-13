@@ -1,0 +1,12 @@
+name: maps_quarto_cw
+title: maps_quarto_cw
+username: fuamaiatago
+account: fuamaiatago
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a11448-24a3-bfb5-c4ed-f1d83efa226e
+bundleId:
+url: https://connect.posit.cloud/fuamaiatago/content/01a11448-24a3-bfb5-c4ed-f1d83efa226e
+version: 1
+asMultiple: FALSE
+asStatic: TRUE

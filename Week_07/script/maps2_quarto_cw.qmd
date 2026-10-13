@@ -1,0 +1,306 @@
+---
+title: "Introduction to Mapping Part 2"
+author: "Fuamai Tago"
+date: "October 6, 2026"
+date-format: long
+title-block-banner: true
+format:
+  html:
+    toc: true 
+    toc-depth: 3
+    code-fold: true
+    code-summary: "show code"
+    theme: cosmo
+    fig-width: 7
+    fig-height: 5
+execute:
+  warning: false
+  message: false
+---
+## Mapping
+
+```{r}
+#load libraries 
+
+#install.packages(c("maptiles","tidyterra","leaflet", "tidygeocoder", "ggspatial")) 
+
+library(sf)
+library(tidyverse) #meta-package used for cleaning data for easy workflow  
+library(here) #enable easy file referencing 
+library(maptiles) #downloads tile basemaps
+library(tidyterra) #plot terra rasters in ggplot2
+library(leaflet) #create interactive maps
+library(tidygeocoder) #provides mechanisms to use free geocoding services
+library(ggspatial) #provide spatial dataframework for ggplot2; includes cartographic annotations: north arrows and scale bars
+
+```
+
+## Chemical Data Import
+
+```{r}
+#import maunalua chemical data 
+chemi <- read.csv(here("Week_04","data","chemicaldata_maunalua.csv"))
+
+glimpse(chemi)
+
+chemi_dd_clean <- chemi |>
+  drop_na() |>
+  separate_wider_delim(cols = "Tide_time",
+                       delim = "_",
+                       names = c("Tide", "Time"),
+                       cols_remove = FALSE)
+
+```
+# Downloading Tile Basemaps 
+
+We will use the code: {maptiles} to download satellite and street map tiles. Having internet is necessary to be able to download. Maptiles is similar to  Google maps, as in it stitches together various parts of the map to form the bigger images.
+
+```{r}
+#maptiles - figures which tiles needed > downloads them > stitches them together into one image
+#define areas of interest, by setting bounding box of lat and longi = focus on Wailupe, Oahu 
+# xmin /xmax = westmost /eastmost longitude
+# ymin/ymax = southernmost /northernmost latitude 
+
+#st_as_sfc() need to download library(sf) prior to this; converts this into sf() geometric object so maptiles can read 
+# st_bbox () creates bounding box rectangle
+# crs (coordinate system) = 4326 specifies that WGS84 (basic lat/long system on your GPS) - almost all GPS and web page data uses this coordinate system 
+
+wailupe_bbox <- st_as_sfc(
+  st_bbox(c(xmin = -157.772, ymin = 21.267,
+            xmax = -157.752, ymax = 21.281),
+          crs = 4326))
+
+```
+
+# Download Tiles
+
+```{r}
+tiles_satellite <- get_tiles( 
+  wailupe_bbox, #area to download
+  provider = "Esri.WorldImagery", #which tile source to use; ESRI is case sensitive
+  zoom = 16, #level of detail (3 = continent & 20 = building)
+  crop = TRUE, #clip to our exact bbox (vs slightly larger)
+  cachedir = here("Week_07", "data", "tiles_cache")) #save raw image tiles once to disk 
+
+```
+
+```{r}
+#what does get_tiles return?
+# spatraster - raster image (grid if pixels) from terra package
+# raster - matrix of pixel values 
+# tiles_satellite has 3 layers (red, green, blue) 
+# cannot use geom_raster() bc that expects a dataframe not a terra object 
+
+class(tiles_satellite)
+
+
+#tidyterra bridges gap with geo_spatraster
+
+```
+
+```{r}
+#geom_spatraster_rgb is from tidyterra. 
+#Reads the 3 color layers and renders them as a photo
+
+ggplot() + 
+  geom_spatraster_rgb(data = tiles_satellite) +
+  coord_sf(crs = 4326) + #always include coordinates in WGS84. Include it in plotting spatial data - ensure map isnt distorted and that scale bars work correctly later. 
+  theme_minimal()
+```
+```{r}
+tiles_street <- get_tiles( 
+  wailupe_bbox, #area to download
+  provider = "CartoDB.Positron", #which tile source to use; ESRI is case sensitive
+  zoom = 16, #level of detail (3 = continent & 20 = building)
+  crop = TRUE, #clip to our exact bbox (vs slightly larger)
+  cachedir = here("Week_07", "data", "tiles_cache")) #save raw image tiles once to disk 
+
+ggplot() + 
+  geom_spatraster_rgb(data = tiles_street) +
+  coord_sf(crs = 4326) + 
+  theme_minimal()
+```
+
+
+```{r}
+# Step 1: convert your data frame to an sf object
+# coords tells sf which columns hold longitude and latitude
+chemi_sf <- st_as_sf(chemi_dd_clean,
+                         coords = c("Long", "Lat"),
+                         crs = 4326)
+
+# Step 2: get the bounding box and add a small buffer
+# the + c(...) pads all four sides by ~0.4 km so points aren't at the edge
+bbox_chem <- st_bbox(chemi_sf) + c(-0.004, -0.004, 0.004, 0.004)
+
+# Step 3: download tiles for that extent
+Map_satellite <- get_tiles(
+  st_as_sfc(bbox_chem),
+  provider = "Esri.WorldImagery",
+  zoom = 15,
+  crop = TRUE,
+  cachedir = here("Week_07", "data", "tiles_cache")
+)
+```
+
+```{r}
+ggplot() +
+  geom_spatraster_rgb(data = Map_satellite) +
+  geom_point(data = chemi_dd_clean,
+             aes(x = Long, y = Lat,
+                 color = Salinity),
+             size = 4) +
+  scale_color_viridis_c() +
+  coord_sf(crs = 4326) +
+  theme_minimal()
+```
+
+```{r}
+ggplot() +
+  geom_spatraster_rgb(data = Map_satellite) +
+  geom_point(data = chemi_dd_clean,
+             aes(x = Long, y = Lat,
+                 color = Salinity),
+             size = 4) +
+  scale_color_viridis_c() +
+  annotation_scale(           # scale bar
+    location = "bl",          # bl = bottom-left
+    bar_cols = c("yellow", "white")) +
+  annotation_north_arrow(     # north arrow
+    location = "tl") +        # tl = top-left
+  coord_sf(crs = 4326) +
+  theme_minimal()
+```
+
+```{r}
+ggplot() +
+  geom_spatraster_rgb(data = Map_satellite) +
+  geom_point(data = chemi_dd_clean,
+             aes(x = Long, y = Lat, color = Salinity),
+             size = 4) +
+  scale_color_viridis_c(name = "Salinity (ppt)") +
+  annotation_scale(location = "bl",
+                   bar_cols = c("yellow", "white")) +
+  annotation_north_arrow(location = "tl") +
+  coord_sf(crs = 4326) +
+  labs(title = "Maunalua Bay — Water Chemistry",
+       caption = "Basemap: ESRI World Imagery") +
+  theme_minimal()
+
+ggsave(here("Week_07", "output", "maunalua_map.pdf"), width = 8, height = 6)
+```
+
+```{r}
+#leaflet() |>                       # 1. create the map widget
+#  addProviderTiles(...) |>         # 2. add a basemap tile layer
+# addCircleMarkers(...) |>         # 3. add your data as markers
+# addLegend(...)                   # 4. add a color legend
+
+
+leaflet() |>
+  addProviderTiles(providers$Esri.WorldImagery) |>
+  setView(lng = -157.762, lat = 21.274, zoom = 14)
+```
+```{r}
+my_map <- leaflet(data = chemi_dd_clean)
+my_map<- addProviderTiles(my_map,"Esri.WorldImagery")
+
+pal <- colorNumeric(
+  palette = "viridis", domain = chemi_dd_clean$Salinity)
+
+my_map_1 <- addCircleMarkers(
+  map = my_map,
+  lng = ~Long,
+  lat = ~Lat,
+  color = ~pal(Salinity))
+```
+
+```{r}
+# colorNumeric() returns a FUNCTION, not a color vector
+pal <- colorNumeric(
+  palette = "viridis",            # any RColorBrewer or viridis palette name
+  domain = chemi_dd_clean$Salinity      # the full range of values to map
+)
+
+# Use it by calling pal(value) — it returns a hex color
+pal(30)  # what color does salinity = 30 get?
+
+
+pal <- colorNumeric("viridis", domain = chemi_dd_clean$Salinity)
+
+leaflet(chemi_dd_clean) |>           # pass data frame here
+  addProviderTiles(providers$Esri.WorldImagery) |>
+  addCircleMarkers(
+    lng = ~Long, lat = ~Lat,   # which columns are coordinates
+    color = ~pal(Salinity),    # apply our color function to Salinity
+    radius = 6,
+    fillOpacity = 0.9,
+    popup = ~paste("Salinity:", Salinity, "ppt",  # click a point to see this
+                   "<br>Site:", Site)) |>
+  addLegend(
+    pal = pal,                 # the same color function
+    values = ~Salinity,        # which column drives the legend
+    title = "Salinity (ppt)",
+    position = "bottomright")
+```
+```{r}
+pal <- colorNumeric("viridis", domain = chemi_dd_clean$Salinity)
+
+leaflet(chemi_dd_clean) |>           # pass data frame here
+  addProviderTiles(providers$Esri.WorldImagery) |>
+  addCircleMarkers(
+    lng = ~Long, lat = ~Lat,   # which columns are coordinates
+    color = ~pal(Salinity),    # apply our color function to Salinity
+    radius = 6,
+    fillOpacity = 0.9,
+    popup = ~paste("Site:",Site,  # click a point to see this
+                   "<br>Salinity:", Salinity)) |>
+  addLegend(
+    pal = pal,                 # the same color function
+    values = ~Salinity,        # which column drives the legend
+    title = "Salinity (ppt)",
+    position = "bottomright")
+
+
+
+```
+
+```{r}
+geo("University of Hawaii at Manoa", method = "osm")
+```
+```{r}
+geo("Pearl Harbor, Oahu, Hawaii", method = "osm")
+```
+```{r}
+oahu_sites <- tribble(
+  ~place,
+  "University of Hawaii at Manoa",
+  "Honolulu International Airport",
+  "Pearl Harbor National Memorial, Hawaii",
+  "Diamond Head State Monument, Hawaii"
+)
+
+oahu_geocoded <- oahu_sites |>
+  geocode(place, method = "osm") # geocode the 'place' column
+
+oahu_geocoded
+```
+```{r}
+leaflet(oahu_geocoded) |>
+  addProviderTiles(providers$Esri.WorldImagery) |>
+  addMarkers(
+    lng = ~long, lat = ~lat,   # tidygeocoder always returns 'lat' and 'long'
+    label = ~place)            # hover to see place name
+```
+
+```{r}
+library(emojifont)
+
+search_emoji("smile")
+
+ggplot() +
+  geom_emoji("smile_cat",
+             x = 1:5, y = 1:5,
+             size = 10)
+```
+
