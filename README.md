@@ -44,8 +44,7 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/data)
 * [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/output)
 * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/script)
-* [Quarto](https://connect.posit.cloud/fuamaiatago/content/01a13764-5e05-ce0e-4e7b-164de9d57b5d)
- 
+* [Quarto](https://01a13764-5e05-ce0e-4e7b-164de9d57b5d.share.connect.posit.cloud)
 
 
 
