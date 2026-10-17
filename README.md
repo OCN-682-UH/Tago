@@ -46,5 +46,10 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_07/script)
 * [Quarto](https://01a13764-5e05-ce0e-4e7b-164de9d57b5d.share.connect.posit.cloud)
 
+**Good/Bad Plot**. 
+* 
+
+
+
 
 

@@ -1,0 +1,160 @@
+---
+title: "Good and Bad Plot"
+author: "Fuamai Tago"
+date: today
+date-format: long
+title-block-banner: true
+format:
+  html:
+    toc: true
+    code-fold: true
+    code-summary: "show code"
+    theme:
+      dark: morph
+execute:
+  warning: false
+  message: false 
+---
+# INTRODUCTION
+
+In this report, we will use the milkcow_facts dataframe compiled from the United States Department of Agriculture historical data. This data looks at the dairy production of cows across the US herds from 1970 to 2017. 
+
+The main question for this report is to explore whether obtaining or purchasing more alfalfa hay would be productive in producing more milk per cows. 
+
+The objectives for this report are to: 
+1. create a bad plot 
+2. create a good plot 
+
+# Load Milk dataframe 
+
+```{r}
+#load libraries - no need to load dplyr and ggplot bc already included in tidyverse
+
+library(tidyverse)
+library(ggrepel)
+library(here)
+library(tidyr)
+library(readr)
+library(lubridate)
+```
+```{r}
+#import dataset 
+#download the dataset from github
+milk <- read_csv(here("good_bad_plot", "data", "milkcow_facts.csv"))
+
+glimpse(milk)
+```
+
+## Objective 1: Create a Bad Plot 
+
+::: callout-note
+**Tip**: *Do not do this. These are all bad practices set up to make a horrible plot.*
+:::
+
+```{r}
+#| label: fig-badplot
+#| fig-cap: "Bad plot of Milk Production versus Alfalfa Hay for Cows"
+#| fig-align: "center"
+
+#horrible data preparation
+#mutate: creating a new hay column into three distinct categories.
+#if_else: this is nested within the if_else function because we are looking at three different categories.
+bad_milk <- milk |>
+  mutate(hay_category = if_else(alfalfa_hay_price < 80, 
+                       "Cheap", 
+                       if_else(alfalfa_hay_price >= 80
+                               & alfalfa_hay_price < 130,
+                               "Medium", "High")))
+
+#plot this bad milk 
+
+ggplot(bad_milk, aes(x = "",
+                     y = milk_per_cow,
+                     fill = hay_category)) +
+  geom_bar(stat = "identity", width = 1,
+           color = "hotpink") +
+  coord_polar(theta = "x") +
+  theme_void()+
+  theme(panel.background = element_rect
+        (fill = "green", color = "purple"),
+          plot.background = element_rect
+          (fill = "lightblue"),
+        panel.grid.major = element_line(color = "yellow", linewidth = 5)) +
+  labs( title = "Hay Categories vs Milk Production",
+        fill = "Hay Category")
+
+#save plot 
+
+ggsave(here("good_bad_plot","output","badplot.png"),width = 8, height = 5)
+```
+@fig-badplot demonstrates various violations for plotting. Some of the most obvious ones are:
+
+1. The chosen pie-style chart is irrelevant and cannot physically answer the correlation question.
+2. The usage of clashing neon colors and heavy gridlines create visual noise that completely overpowers the data. In addition the colors are visually and highly distracting.
+3. This chart forces continuous data into categorical brackets, destroying the numeric accuracy and hides the true data variance.
+4. The horizontal and vertical grid baselines leaves the readers with no scale to measure or interpret the data.
+5. The legend is highly obstructive. By placing the giant solid, colored box in the center blocks the visual shapes plotting underneath it. 
+6. The chart blindly sums up decades of annual records. One section looks at a large simply because that price range lasted for more calendar years. 
+7. Using the function "coord_polar(theta = "x")" distorts the geometric model by curving the horizontal baseline. This creates concentric target rings of standard pie slices.
+
+
+## Objective 2: Create a Good Plot 
+```{r}
+#| label: fig-goodplot
+#| fig-cap: "Good plot of Milk Production versus Alfalfa Hay for Cows"
+#| fig-align: "center"
+
+#clean dataset 
+
+good_milk <- milk |>
+  #filter to only look at alfalfa price and milk production
+  filter(!is.na(alfalfa_hay_price),
+         !is.na(milk_per_cow)) |>
+  #plot this good milk 
+  ggplot(aes(x = alfalfa_hay_price, 
+             y = milk_per_cow)) +
+  #scatter plot to make correlation
+  geom_point(mapping = aes(color = year), size = 4, 
+             alpha = 0.9) +
+  #adding smooth line
+  geom_smooth(method = "lm", color = "#f0877d", 
+              se = TRUE, linewidth = 1.4) +
+  scale_color_viridis_c(option = "plasma", 
+                        name = "Timeline (Year)") +
+  theme_minimal(base_size = 12) +
+  labs (title = "Does Alfalfa Investment Correlate with Higher Milk Yields?",
+        subtitle = "A positive linear relationship observed across about 5 decades",
+        x = "Alfalfa Hay Price ($ per ton)",
+        y = "Milk Production per Cow (lbs)") +
+  theme(plot.title = element_text(face = "bold", 
+                                  size = 14),
+        axis.text.x = element_text(face = "plain"),
+        axis.text.y = element_text(face = "plain"),
+        axis.line = element_line(color = "black",
+                                 linewidth = 0.6),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+  
+  
+#view plot
+good_milk
+
+ggsave(here("good_bad_plot", "output", "goodplot.png"), width = 8, height = 5)
+```
+
+@fig-goodplot demonstrates good practices for plotting:
+
+1. The scatter plot is an ideal statistical method to show the distribution and relationship between two continuous variables. 
+2. The color choices are clean. They do not clash and is easy to communicate without creating visual noise.
+3. This specific layout accurately shows the direct linear relationship without sacrificing data precision or hiding variance.
+4. This plot shows descriptive axis titles, and clear labels which states the variables with corresponding measurement units. These description makes it easy to orient the reader. 
+5. Adding a smooth regression line makes the correlation pattern obvious and easy to read.
+
+
+
+
+
+
+

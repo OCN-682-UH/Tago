@@ -1,7 +1,7 @@
 ---
 title: "Mapping Meteorites"
 author: "Fuamai Tago"
-date: "October 6, 2026"
+date: "October 13, 2026"
 date-format: long
 title-block-banner: true
 format:
