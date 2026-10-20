@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fuamai Ativalu Tago">
+<meta name="dcterms.date" content="2026-10-20">
+
+<title>Function: Box Plot Version</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Function_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Function_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Function_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Function_files/libs/quarto-html/popper.min.js"></script>
+<script src="Function_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Function_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Function_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Function_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Function_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Function_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Function_files/libs/bootstrap/bootstrap-8ffd5f67044e5306d9846f29df41dda5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="Function_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="Function_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="quarto-light">
+
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Function: Box Plot Version</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fuamai Ativalu Tago </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 20, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#loading-libraries" id="toc-loading-libraries" class="nav-link" data-scroll-target="#loading-libraries">Loading libraries</a></li>
+  </ul></li>
+  <li><a href="#objective-1-create-a-summary-table" id="toc-objective-1-create-a-summary-table" class="nav-link" data-scroll-target="#objective-1-create-a-summary-table">Objective 1: Create a Summary Table</a>
+  <ul class="collapse">
+  <li><a href="#testing-with-penguin-data-frame" id="toc-testing-with-penguin-data-frame" class="nav-link" data-scroll-target="#testing-with-penguin-data-frame">Testing with Penguin data frame</a></li>
+  <li><a href="#testing-with-water-quality-dataframe" id="toc-testing-with-water-quality-dataframe" class="nav-link" data-scroll-target="#testing-with-water-quality-dataframe">Testing with Water Quality Dataframe</a></li>
+  </ul></li>
+  <li><a href="#objective-2-create-boxplot" id="toc-objective-2-create-boxplot" class="nav-link" data-scroll-target="#objective-2-create-boxplot">Objective 2: Create Boxplot</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This report will cover what we have learned in class: <em>developing our own functions</em>. The primary purpose of creating functions is to automate repetitive tasks-such as cleaning multiple dataframes, using the same plot to observe the correlations, or to simply run your script- while minimizing copy-paste errors when duplicating the code chunks. It will also help the data be organized, readable and reusable.</p>
+<p>To see whether the functions are successful, it should follow the four-part anatomy:</p>
+<ol type="1">
+<li><strong>Function name</strong> - describes what the function does (choose a good descriptive name)</li>
+<li><strong>Arguments</strong> - the input slot that lists the multiple arguments</li>
+<li><strong>Function body</strong> - places code inside the <strong>{}</strong> (curly curly blocks) to execute the task</li>
+<li><strong>Return Statement</strong> - the final output sent back to reader or viewer</li>
+</ol>
+<p>In this report we will use the penguins dataset to develop the two useful functions, but will test its flexibility using the water quality data from Sydney (download from tidy tuesday). The objectives are:</p>
+<ol type="1">
+<li>Creating a summary table that identifies and excludes the outliers, along with making it publication-quality ready table</li>
+<li>Create a visual boxplot ~ lets visualize the data distribution and compare groups.</li>
+</ol>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PNWColors)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#import dataset </span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(penguins,<span class="fu">here</span>(<span class="st">"Week_08"</span>, <span class="st">"data"</span>, <span class="st">"penguins.csv"</span>))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(penguins)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>water_quality <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"data"</span>,<span class="st">"water_quality.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="objective-1-create-a-summary-table" class="level1">
+<h1>Objective 1: Create a Summary Table</h1>
+<p>This is a very important portion with regards to cleaned data prior to making the boxplot. Instead of repetitively trying to create clean summary tables, we can use this function to generate cleaner tables for any dataframe that is being prepped for boxplot.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate the clean summary table with kable to make it cleaner </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>clean_table <span class="ot">&lt;-</span> <span class="cf">function</span>(data, group, value, <span class="at">type =</span> <span class="st">"html"</span>, <span class="at">custom_cols =</span> <span class="cn">NULL</span>) { <span class="cf">if</span>(<span class="fu">is.null</span>(custom_cols)) {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      group_name <span class="ot">&lt;-</span> <span class="fu">str_to_title</span>(<span class="fu">gsub</span>(<span class="st">"_"</span>, <span class="st">""</span>, <span class="fu">deparse</span>(<span class="fu">substitute</span>(group)))) </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      custom_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(group_name, <span class="st">"Sample Size"</span>,<span class="st">"Mean"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Median"</span>, <span class="st">"Max"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{value}}), <span class="sc">!</span><span class="fu">is.na</span>({{group}})) <span class="sc">|&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>({{group}})<span class="sc">|&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>( <span class="at">sample =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">mean =</span> <span class="fu">mean</span>({{value}}),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">median =</span> <span class="fu">median</span>({{value}}),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">max =</span> <span class="fu">max</span> ({{value}}),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean)) <span class="sc">|&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">align =</span> <span class="st">"c"</span>, <span class="at">digits =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>,<span class="st">"hover"</span>,<span class="st">"condensed"</span>),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="st">"center"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"aliceblue"</span>, <span class="at">background =</span> <span class="st">"#2D3748"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Now that the code is being developed let’s try and practice with both the penguin data as a test and water quality data as the flexibility test.</p>
+<section id="testing-with-penguin-data-frame" class="level2">
+<h2 class="anchored" data-anchor-id="testing-with-penguin-data-frame">Testing with Penguin data frame</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>penguin_table <span class="ot">&lt;-</span> <span class="fu">clean_table</span>(penguins, species, flipper_length_mm)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>penguin_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">species</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">sample</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">mean</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">median</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Gentoo</td>
+<td style="text-align: center;">123</td>
+<td style="text-align: center;">217.19</td>
+<td style="text-align: center;">216</td>
+<td style="text-align: center;">231</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chinstrap</td>
+<td style="text-align: center;">68</td>
+<td style="text-align: center;">195.82</td>
+<td style="text-align: center;">196</td>
+<td style="text-align: center;">212</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Adelie</td>
+<td style="text-align: center;">151</td>
+<td style="text-align: center;">189.95</td>
+<td style="text-align: center;">190</td>
+<td style="text-align: center;">210</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="testing-with-water-quality-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="testing-with-water-quality-dataframe">Testing with Water Quality Dataframe</h2>
+<p>It works!! Lets try with the water quality data.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>entero_summary <span class="ot">&lt;-</span> <span class="fu">clean_table</span>(water_quality, swim_site, enterococci_cfu_100ml)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>entero_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">swim_site</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">sample</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">mean</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">median</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Tambourine Bay</td>
+<td style="text-align: center;">1497</td>
+<td style="text-align: center;">1197.15</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">1100000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Woolwich Baths</td>
+<td style="text-align: center;">1544</td>
+<td style="text-align: center;">858.61</td>
+<td style="text-align: center;">7.0</td>
+<td style="text-align: center;">800000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Woodford Bay</td>
+<td style="text-align: center;">1533</td>
+<td style="text-align: center;">812.17</td>
+<td style="text-align: center;">5.0</td>
+<td style="text-align: center;">800000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Sangrado Baths</td>
+<td style="text-align: center;">787</td>
+<td style="text-align: center;">535.25</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">98000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Wentworth Falls Lake - Jetty</td>
+<td style="text-align: center;">190</td>
+<td style="text-align: center;">516.49</td>
+<td style="text-align: center;">73.5</td>
+<td style="text-align: center;">25000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Davidson Reserve</td>
+<td style="text-align: center;">1489</td>
+<td style="text-align: center;">439.66</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">79000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Darling Harbour</td>
+<td style="text-align: center;">1424</td>
+<td style="text-align: center;">425.97</td>
+<td style="text-align: center;">32.0</td>
+<td style="text-align: center;">74000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Northbridge Baths</td>
+<td style="text-align: center;">1551</td>
+<td style="text-align: center;">346.14</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">240000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Little Sirius Cove</td>
+<td style="text-align: center;">968</td>
+<td style="text-align: center;">313.94</td>
+<td style="text-align: center;">11.0</td>
+<td style="text-align: center;">80000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Megalong Creek</td>
+<td style="text-align: center;">171</td>
+<td style="text-align: center;">276.78</td>
+<td style="text-align: center;">150.0</td>
+<td style="text-align: center;">3800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Yarramundi Reserve</td>
+<td style="text-align: center;">123</td>
+<td style="text-align: center;">231.37</td>
+<td style="text-align: center;">84.0</td>
+<td style="text-align: center;">6500</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Yosemite Creek - Minnehaha Falls</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: center;">208.72</td>
+<td style="text-align: center;">81.0</td>
+<td style="text-align: center;">3800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Boat Harbour</td>
+<td style="text-align: center;">2487</td>
+<td style="text-align: center;">204.01</td>
+<td style="text-align: center;">24.0</td>
+<td style="text-align: center;">140000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Gurney Crescent Baths</td>
+<td style="text-align: center;">1371</td>
+<td style="text-align: center;">183.03</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">22000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Cabarita Beach</td>
+<td style="text-align: center;">1402</td>
+<td style="text-align: center;">165.49</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">28000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Callan Park Seawall</td>
+<td style="text-align: center;">254</td>
+<td style="text-align: center;">158.28</td>
+<td style="text-align: center;">5.0</td>
+<td style="text-align: center;">13000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Dawn Fraser Pool</td>
+<td style="text-align: center;">1546</td>
+<td style="text-align: center;">155.01</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">21000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Henley Baths (Kelly Street Baths)</td>
+<td style="text-align: center;">803</td>
+<td style="text-align: center;">149.93</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">25000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">North Curl Curl Beach</td>
+<td style="text-align: center;">2143</td>
+<td style="text-align: center;">146.78</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">80000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Queenscliff Beach</td>
+<td style="text-align: center;">2207</td>
+<td style="text-align: center;">143.44</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">33000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bilarong Reserve</td>
+<td style="text-align: center;">637</td>
+<td style="text-align: center;">142.65</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">9000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Clontarf Pool</td>
+<td style="text-align: center;">1552</td>
+<td style="text-align: center;">131.77</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">40000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Malabar Beach</td>
+<td style="text-align: center;">2135</td>
+<td style="text-align: center;">130.81</td>
+<td style="text-align: center;">17.0</td>
+<td style="text-align: center;">37947</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Hayes Street Beach</td>
+<td style="text-align: center;">1536</td>
+<td style="text-align: center;">130.02</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">36000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Greenwich Baths</td>
+<td style="text-align: center;">1555</td>
+<td style="text-align: center;">126.81</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">30000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Wentworth Falls Lake - Beach</td>
+<td style="text-align: center;">182</td>
+<td style="text-align: center;">123.89</td>
+<td style="text-align: center;">26.0</td>
+<td style="text-align: center;">4000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Narrabeen Lagoon (Birdwood Park)</td>
+<td style="text-align: center;">1148</td>
+<td style="text-align: center;">116.80</td>
+<td style="text-align: center;">16.0</td>
+<td style="text-align: center;">7300</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Oak Park Beach</td>
+<td style="text-align: center;">1878</td>
+<td style="text-align: center;">102.07</td>
+<td style="text-align: center;">3.0</td>
+<td style="text-align: center;">35000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Windsor Beach</td>
+<td style="text-align: center;">124</td>
+<td style="text-align: center;">98.98</td>
+<td style="text-align: center;">39.5</td>
+<td style="text-align: center;">2200</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Cronulla Beach</td>
+<td style="text-align: center;">2497</td>
+<td style="text-align: center;">96.55</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">60000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Balmoral Baths</td>
+<td style="text-align: center;">1549</td>
+<td style="text-align: center;">92.06</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">20000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chinamans Beach</td>
+<td style="text-align: center;">1256</td>
+<td style="text-align: center;">89.48</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">48000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Rose Bay Beach</td>
+<td style="text-align: center;">1520</td>
+<td style="text-align: center;">87.30</td>
+<td style="text-align: center;">10.0</td>
+<td style="text-align: center;">11000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chiswick Baths</td>
+<td style="text-align: center;">1253</td>
+<td style="text-align: center;">84.97</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">13000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Clifton Gardens</td>
+<td style="text-align: center;">1496</td>
+<td style="text-align: center;">79.18</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">30000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Parsley Bay</td>
+<td style="text-align: center;">1499</td>
+<td style="text-align: center;">78.77</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">9000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Murray Rose Pool</td>
+<td style="text-align: center;">1496</td>
+<td style="text-align: center;">71.86</td>
+<td style="text-align: center;">7.0</td>
+<td style="text-align: center;">5700</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Greenhills Beach</td>
+<td style="text-align: center;">2479</td>
+<td style="text-align: center;">66.94</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Tamarama Beach</td>
+<td style="text-align: center;">2133</td>
+<td style="text-align: center;">66.88</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">39000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bilgola Beach</td>
+<td style="text-align: center;">2076</td>
+<td style="text-align: center;">63.28</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">96000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Watsons Bay</td>
+<td style="text-align: center;">1498</td>
+<td style="text-align: center;">63.25</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">21000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bronte Beach</td>
+<td style="text-align: center;">2193</td>
+<td style="text-align: center;">61.63</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">30000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Coogee Beach</td>
+<td style="text-align: center;">2200</td>
+<td style="text-align: center;">59.06</td>
+<td style="text-align: center;">12.0</td>
+<td style="text-align: center;">7389</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">North Cronulla Beach</td>
+<td style="text-align: center;">2492</td>
+<td style="text-align: center;">58.44</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Manly Cove</td>
+<td style="text-align: center;">1549</td>
+<td style="text-align: center;">56.83</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">10000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elouera Beach</td>
+<td style="text-align: center;">2499</td>
+<td style="text-align: center;">55.68</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Shelly Beach (Sutherland)</td>
+<td style="text-align: center;">1874</td>
+<td style="text-align: center;">54.70</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">13000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Maroubra Rockpool</td>
+<td style="text-align: center;">743</td>
+<td style="text-align: center;">54.49</td>
+<td style="text-align: center;">7.0</td>
+<td style="text-align: center;">3200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Shelly Beach (Manly)</td>
+<td style="text-align: center;">2137</td>
+<td style="text-align: center;">53.49</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">North Narrabeen Beach</td>
+<td style="text-align: center;">2072</td>
+<td style="text-align: center;">51.45</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">35000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Wanda Beach</td>
+<td style="text-align: center;">2499</td>
+<td style="text-align: center;">44.66</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">6100</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Edwards Beach</td>
+<td style="text-align: center;">1500</td>
+<td style="text-align: center;">44.22</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">15000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Little Bay Beach</td>
+<td style="text-align: center;">1325</td>
+<td style="text-align: center;">42.79</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">4900</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Little Manly Cove</td>
+<td style="text-align: center;">1499</td>
+<td style="text-align: center;">37.18</td>
+<td style="text-align: center;">3.0</td>
+<td style="text-align: center;">2800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Forty Baskets Pool</td>
+<td style="text-align: center;">1500</td>
+<td style="text-align: center;">35.30</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">4500</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Collaroy Beach</td>
+<td style="text-align: center;">2073</td>
+<td style="text-align: center;">35.03</td>
+<td style="text-align: center;">3.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">South Steyne Beach</td>
+<td style="text-align: center;">2182</td>
+<td style="text-align: center;">34.22</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Curl Curl Beach</td>
+<td style="text-align: center;">2054</td>
+<td style="text-align: center;">33.65</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">37000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Penrith Beach</td>
+<td style="text-align: center;">51</td>
+<td style="text-align: center;">33.35</td>
+<td style="text-align: center;">9.0</td>
+<td style="text-align: center;">210</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Clovelly Beach</td>
+<td style="text-align: center;">2142</td>
+<td style="text-align: center;">33.13</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">7100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">North Steyne Beach</td>
+<td style="text-align: center;">2143</td>
+<td style="text-align: center;">32.48</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">12000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bondi Beach</td>
+<td style="text-align: center;">2119</td>
+<td style="text-align: center;">31.51</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">3500</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Fairlight Beach</td>
+<td style="text-align: center;">1375</td>
+<td style="text-align: center;">29.99</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">8500</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Nielsen Park</td>
+<td style="text-align: center;">1498</td>
+<td style="text-align: center;">28.01</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">3600</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Newport Beach</td>
+<td style="text-align: center;">2079</td>
+<td style="text-align: center;">25.14</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">4100</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Long Reef Beach</td>
+<td style="text-align: center;">2044</td>
+<td style="text-align: center;">24.26</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">5600</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Maroubra Beach</td>
+<td style="text-align: center;">2126</td>
+<td style="text-align: center;">23.74</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">5800</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Warriewood Beach</td>
+<td style="text-align: center;">2074</td>
+<td style="text-align: center;">22.56</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Dee Why Beach</td>
+<td style="text-align: center;">2074</td>
+<td style="text-align: center;">22.49</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">4000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Freshwater Beach</td>
+<td style="text-align: center;">2054</td>
+<td style="text-align: center;">21.93</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">1800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Gordons Bay (East)</td>
+<td style="text-align: center;">692</td>
+<td style="text-align: center;">21.41</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">1500</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bungan Beach</td>
+<td style="text-align: center;">2077</td>
+<td style="text-align: center;">18.69</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">12001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">South Maroubra Beach</td>
+<td style="text-align: center;">716</td>
+<td style="text-align: center;">17.33</td>
+<td style="text-align: center;">3.0</td>
+<td style="text-align: center;">1200</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Mona Vale Beach</td>
+<td style="text-align: center;">2061</td>
+<td style="text-align: center;">16.01</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">4500</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Camp Cove</td>
+<td style="text-align: center;">396</td>
+<td style="text-align: center;">15.37</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">1500</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Palm Beach</td>
+<td style="text-align: center;">2064</td>
+<td style="text-align: center;">12.35</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">2000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Avalon Beach</td>
+<td style="text-align: center;">2062</td>
+<td style="text-align: center;">12.17</td>
+<td style="text-align: center;">0.0</td>
+<td style="text-align: center;">13000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Turimetta Beach</td>
+<td style="text-align: center;">1808</td>
+<td style="text-align: center;">11.50</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">1500</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Whale Beach</td>
+<td style="text-align: center;">2080</td>
+<td style="text-align: center;">8.55</td>
+<td style="text-align: center;">0.0</td>
+<td style="text-align: center;">2300</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#testing part 2</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>temp_summary <span class="ot">&lt;-</span> <span class="fu">clean_table</span>(water_quality, swim_site, water_temperature_c)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>temp_summary </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">swim_site</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">sample</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">mean</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">median</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; font-weight: bold; color: aliceblue !important; background-color: rgba(45, 55, 72, 1) !important;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Penrith Beach</td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">24.20</td>
+<td style="text-align: center;">25.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Windsor Beach</td>
+<td style="text-align: center;">122</td>
+<td style="text-align: center;">22.64</td>
+<td style="text-align: center;">24.0</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Callan Park Seawall</td>
+<td style="text-align: center;">254</td>
+<td style="text-align: center;">21.28</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chiswick Baths</td>
+<td style="text-align: center;">433</td>
+<td style="text-align: center;">21.22</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Northbridge Baths</td>
+<td style="text-align: center;">496</td>
+<td style="text-align: center;">21.20</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">29</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Gurney Crescent Baths</td>
+<td style="text-align: center;">448</td>
+<td style="text-align: center;">21.18</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Davidson Reserve</td>
+<td style="text-align: center;">518</td>
+<td style="text-align: center;">21.08</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Woodford Bay</td>
+<td style="text-align: center;">483</td>
+<td style="text-align: center;">21.02</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Woolwich Baths</td>
+<td style="text-align: center;">525</td>
+<td style="text-align: center;">20.99</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Tambourine Bay</td>
+<td style="text-align: center;">509</td>
+<td style="text-align: center;">20.94</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Clontarf Pool</td>
+<td style="text-align: center;">489</td>
+<td style="text-align: center;">20.80</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Yarramundi Reserve</td>
+<td style="text-align: center;">119</td>
+<td style="text-align: center;">20.72</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Darling Harbour</td>
+<td style="text-align: center;">462</td>
+<td style="text-align: center;">20.72</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">129</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Dawn Fraser Pool</td>
+<td style="text-align: center;">519</td>
+<td style="text-align: center;">20.71</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Sangrado Baths</td>
+<td style="text-align: center;">31</td>
+<td style="text-align: center;">20.65</td>
+<td style="text-align: center;">22.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Edwards Beach</td>
+<td style="text-align: center;">470</td>
+<td style="text-align: center;">20.62</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">49</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Hayes Street Beach</td>
+<td style="text-align: center;">476</td>
+<td style="text-align: center;">20.58</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Wentworth Falls Lake - Beach</td>
+<td style="text-align: center;">125</td>
+<td style="text-align: center;">20.56</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Wentworth Falls Lake - Jetty</td>
+<td style="text-align: center;">124</td>
+<td style="text-align: center;">20.56</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Greenwich Baths</td>
+<td style="text-align: center;">521</td>
+<td style="text-align: center;">20.53</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bondi Beach</td>
+<td style="text-align: center;">836</td>
+<td style="text-align: center;">20.53</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">1040</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Camp Cove</td>
+<td style="text-align: center;">369</td>
+<td style="text-align: center;">20.51</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Balmoral Baths</td>
+<td style="text-align: center;">510</td>
+<td style="text-align: center;">20.47</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Forty Baskets Pool</td>
+<td style="text-align: center;">477</td>
+<td style="text-align: center;">20.42</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Gordons Bay (East)</td>
+<td style="text-align: center;">691</td>
+<td style="text-align: center;">20.42</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">956</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Maroubra Rockpool</td>
+<td style="text-align: center;">691</td>
+<td style="text-align: center;">20.40</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">817</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Cabarita Beach</td>
+<td style="text-align: center;">1158</td>
+<td style="text-align: center;">20.38</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Maroubra Beach</td>
+<td style="text-align: center;">716</td>
+<td style="text-align: center;">20.35</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">812</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Watsons Bay</td>
+<td style="text-align: center;">500</td>
+<td style="text-align: center;">20.35</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Clifton Gardens</td>
+<td style="text-align: center;">503</td>
+<td style="text-align: center;">20.34</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Fairlight Beach</td>
+<td style="text-align: center;">456</td>
+<td style="text-align: center;">20.32</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Murray Rose Pool</td>
+<td style="text-align: center;">515</td>
+<td style="text-align: center;">20.26</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Rose Bay Beach</td>
+<td style="text-align: center;">490</td>
+<td style="text-align: center;">20.25</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Tamarama Beach</td>
+<td style="text-align: center;">849</td>
+<td style="text-align: center;">20.23</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">1025</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Parsley Bay</td>
+<td style="text-align: center;">508</td>
+<td style="text-align: center;">20.17</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Chinamans Beach</td>
+<td style="text-align: center;">1119</td>
+<td style="text-align: center;">20.15</td>
+<td style="text-align: center;">21.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Coogee Beach</td>
+<td style="text-align: center;">917</td>
+<td style="text-align: center;">20.11</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">938</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Little Manly Cove</td>
+<td style="text-align: center;">500</td>
+<td style="text-align: center;">20.10</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bilarong Reserve</td>
+<td style="text-align: center;">629</td>
+<td style="text-align: center;">20.10</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">217</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Little Bay Beach</td>
+<td style="text-align: center;">812</td>
+<td style="text-align: center;">20.09</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">750</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Clovelly Beach</td>
+<td style="text-align: center;">825</td>
+<td style="text-align: center;">20.08</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">947</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Malabar Beach</td>
+<td style="text-align: center;">847</td>
+<td style="text-align: center;">20.01</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">737</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bronte Beach</td>
+<td style="text-align: center;">912</td>
+<td style="text-align: center;">20.00</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">1012</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Newport Beach</td>
+<td style="text-align: center;">644</td>
+<td style="text-align: center;">19.84</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">234</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Nielsen Park</td>
+<td style="text-align: center;">1163</td>
+<td style="text-align: center;">19.79</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Maroubra Beach</td>
+<td style="text-align: center;">1238</td>
+<td style="text-align: center;">19.78</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">924</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Manly Cove</td>
+<td style="text-align: center;">1190</td>
+<td style="text-align: center;">19.66</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">North Narrabeen Beach</td>
+<td style="text-align: center;">636</td>
+<td style="text-align: center;">19.65</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">222</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Whale Beach</td>
+<td style="text-align: center;">643</td>
+<td style="text-align: center;">19.60</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Avalon Beach</td>
+<td style="text-align: center;">642</td>
+<td style="text-align: center;">19.60</td>
+<td style="text-align: center;">20.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Warriewood Beach</td>
+<td style="text-align: center;">633</td>
+<td style="text-align: center;">19.59</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">129</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Henley Baths (Kelly Street Baths)</td>
+<td style="text-align: center;">38</td>
+<td style="text-align: center;">19.58</td>
+<td style="text-align: center;">19.5</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Palm Beach</td>
+<td style="text-align: center;">1232</td>
+<td style="text-align: center;">19.53</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bilgola Beach</td>
+<td style="text-align: center;">638</td>
+<td style="text-align: center;">19.48</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Narrabeen Lagoon (Birdwood Park)</td>
+<td style="text-align: center;">611</td>
+<td style="text-align: center;">19.47</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">245</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Turimetta Beach</td>
+<td style="text-align: center;">634</td>
+<td style="text-align: center;">19.43</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bungan Beach</td>
+<td style="text-align: center;">644</td>
+<td style="text-align: center;">19.38</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">North Cronulla Beach</td>
+<td style="text-align: center;">715</td>
+<td style="text-align: center;">19.31</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">219</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Mona Vale Beach</td>
+<td style="text-align: center;">1221</td>
+<td style="text-align: center;">19.29</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Wanda Beach</td>
+<td style="text-align: center;">697</td>
+<td style="text-align: center;">19.24</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">204</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Collaroy Beach</td>
+<td style="text-align: center;">640</td>
+<td style="text-align: center;">19.24</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Little Sirius Cove</td>
+<td style="text-align: center;">133</td>
+<td style="text-align: center;">19.20</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Dee Why Beach</td>
+<td style="text-align: center;">639</td>
+<td style="text-align: center;">19.10</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Curl Curl Beach</td>
+<td style="text-align: center;">638</td>
+<td style="text-align: center;">19.10</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Megalong Creek</td>
+<td style="text-align: center;">118</td>
+<td style="text-align: center;">19.10</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Freshwater Beach</td>
+<td style="text-align: center;">639</td>
+<td style="text-align: center;">19.08</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Shelly Beach (Sutherland)</td>
+<td style="text-align: center;">701</td>
+<td style="text-align: center;">19.05</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Cronulla Beach</td>
+<td style="text-align: center;">699</td>
+<td style="text-align: center;">19.04</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Long Reef Beach</td>
+<td style="text-align: center;">1212</td>
+<td style="text-align: center;">19.03</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Elouera Beach</td>
+<td style="text-align: center;">694</td>
+<td style="text-align: center;">19.00</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Greenhills Beach</td>
+<td style="text-align: center;">676</td>
+<td style="text-align: center;">18.99</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">North Steyne Beach</td>
+<td style="text-align: center;">637</td>
+<td style="text-align: center;">18.97</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Oak Park Beach</td>
+<td style="text-align: center;">696</td>
+<td style="text-align: center;">18.95</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">South Steyne Beach</td>
+<td style="text-align: center;">694</td>
+<td style="text-align: center;">18.95</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">North Curl Curl Beach</td>
+<td style="text-align: center;">717</td>
+<td style="text-align: center;">18.90</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Queenscliff Beach</td>
+<td style="text-align: center;">727</td>
+<td style="text-align: center;">18.87</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Shelly Beach (Manly)</td>
+<td style="text-align: center;">1225</td>
+<td style="text-align: center;">18.73</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Boat Harbour</td>
+<td style="text-align: center;">683</td>
+<td style="text-align: center;">18.53</td>
+<td style="text-align: center;">19.0</td>
+<td style="text-align: center;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Yosemite Creek - Minnehaha Falls</td>
+<td style="text-align: center;">105</td>
+<td style="text-align: center;">13.61</td>
+<td style="text-align: center;">14.0</td>
+<td style="text-align: center;">20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Clearly the two dataframes differ greatly, since the water quality dataset is very large compared to the penguin dataset. However, the function did achieve the flexibility challenge, and it still needs more work to make it publishable.</p>
+</section>
+</section>
+<section id="objective-2-create-boxplot" class="level1">
+<h1>Objective 2: Create Boxplot</h1>
+<p>The idea for this function was to make sure everything is included, the theme, the filtering, the colors. This was to make sure my life would be super super easy, since I plan to use this function alot for my projects.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>box_color <span class="ot">&lt;-</span> <span class="cf">function</span>(data, group, value, colors_vec, n, type) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{ group }}), <span class="sc">!</span><span class="fu">is.na</span>({{ value }})) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>({{ group}}), <span class="at">y =</span> {{ value }}, <span class="at">fill =</span> <span class="fu">factor</span>({{ group}}))) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">outlier.color =</span> <span class="st">"#e74c3c"</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">pnw_palette</span>(<span class="at">name =</span> colors_vec, <span class="at">n =</span> n, <span class="at">type =</span> type)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">linewidth =</span> <span class="fl">0.6</span>),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#testing 1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>penguin_flipper <span class="ot">&lt;-</span> <span class="fu">box_color</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">group =</span> species,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value =</span> flipper_length_mm,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colors_vec =</span> <span class="st">"Starfish"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n =</span> <span class="dv">3</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"continuous"</span>) <span class="sc">+</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Species Flippers"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Penguin Species"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Flipper Length (mm)"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Species"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>penguin_flipper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"penguin_flipper.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#testing 2</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>penguin_bill <span class="ot">&lt;-</span> <span class="fu">box_color</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">group =</span> species,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">value =</span> bill_length_mm,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">colors_vec =</span> <span class="st">"Bay"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">n =</span> <span class="dv">3</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"discrete"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Comparison of Bill Length (mm), across Penguin Species"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Bill Length (mm)"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Species"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>penguin_bill</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"penguin_bill.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>In addition to developing this function, my hope was to make sure that this function can be easy to change plots. Everything in the function stays the same, except the type of plot and codes that relate to the plot. So in this code, I changed to a violin plot and it worked out well. However, lets try using a scatter plot.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>violin_color<span class="ot">&lt;-</span> <span class="cf">function</span>(data, group, value, colors_vec, n, type) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{ group }}), <span class="sc">!</span><span class="fu">is.na</span>({{ value }})) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>({{ group}}), <span class="at">y =</span> {{ value }}, <span class="at">fill =</span> <span class="fu">factor</span>({{ group}}))) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_violin</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>, <span class="at">draw_quantiles =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>)) <span class="sc">+</span> <span class="co">#used geom violin for bigger stretch </span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">pnw_palette</span>(<span class="at">name =</span> colors_vec, <span class="at">n =</span> n, <span class="at">type =</span> type)) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">linewidth =</span> <span class="fl">0.6</span>),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>##Testing Flexibility</p>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sydney_entero_violin <span class="ot">&lt;-</span><span class="fu">violin_color</span>(<span class="at">data =</span> water_quality,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">group =</span> region,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value =</span> enterococci_cfu_100ml,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colors_vec =</span> <span class="st">"Starfish"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"discrete"</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">label_log</span>(),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">log_breaks</span>()</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sydney Bacteria Distribution by Region"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Region"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Enterococci CFU/100mL (Log10)"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Region"</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">35</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>sydney_entero_violin </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"sydney_entero_violin.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>jitter_color<span class="ot">&lt;-</span> <span class="cf">function</span>(data, group, value, colors_vec, n, type) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{ group }}), <span class="sc">!</span><span class="fu">is.na</span>({{ value }})) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>({{ group}}), <span class="at">y =</span> {{ value }}, <span class="at">color =</span> <span class="fu">factor</span>({{ group}}))) <span class="sc">+</span> <span class="co">#changed fill to color so data can be colored </span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>,<span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">height =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="co">#lowered alpha to make cluster spots</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">pnw_palette</span>(<span class="at">name =</span> colors_vec, <span class="at">n =</span> n, <span class="at">type =</span> type)) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">linewidth =</span> <span class="fl">0.6</span>),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sydney_entero_jitter <span class="ot">&lt;-</span><span class="fu">jitter_color</span>(<span class="at">data =</span> water_quality,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">group =</span> region,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value =</span> enterococci_cfu_100ml,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colors_vec =</span> <span class="st">"Starfish"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"discrete"</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">label_log</span>(),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">log_breaks</span>()</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sydney Bacteria Distribution by Region"</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Region"</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Enterococci CFU/100mL (Log10)"</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Region"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>sydney_entero_jitter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"sydney_entero_jitter.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>scatter_color<span class="ot">&lt;-</span> <span class="cf">function</span>(data, value_x, value_y, group, colors_vec, n, type) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>({{ value_x }}), <span class="sc">!</span><span class="fu">is.na</span>({{ value_y }}), <span class="sc">!</span><span class="fu">is.na</span>({{ group }}), {{value_x}} <span class="sc">&lt;</span> <span class="dv">40</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> {{ value_x}}, <span class="at">y =</span> {{ value_y}}, <span class="at">color =</span> <span class="fu">factor</span>({{ group}}))) <span class="sc">+</span> <span class="co">#changed fill to color so data can be colored </span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="co">#changed to correlation plot</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">method =</span> <span class="st">"lm"</span>, </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>), <span class="co">#find one correlation across all data</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"#2D3748"</span>, </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">linewidth =</span> <span class="fl">1.2</span>, </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">pnw_palette</span>(<span class="at">name =</span> colors_vec, <span class="at">n =</span> n, <span class="at">type =</span> type)) <span class="sc">+</span> <span class="co">#changed the fill to scale color to match point </span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"plain"</span>),</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">linewidth =</span> <span class="fl">0.6</span>),</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sydney_entero_scatter <span class="ot">&lt;-</span><span class="fu">scatter_color</span>(<span class="at">data =</span> water_quality,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">value_x =</span> water_temperature_c,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">value_y =</span> enterococci_cfu_100ml,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">group =</span> region,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colors_vec =</span> <span class="st">"Starfish"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"discrete"</span>) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">label_log</span>(),</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">log_breaks</span>()</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">10</span>, <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sydney Bacteria Concentrations vs Water Temperature by Region"</span>,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Water Temperacture (C)"</span>,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Enterococci CFU/100mL (Log10)"</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Region"</span>)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>sydney_entero_scatter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"sydney_entero_scatter.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sydney_entero <span class="ot">&lt;-</span><span class="fu">box_color</span>(<span class="at">data =</span> water_quality,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">group =</span> region,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">value =</span> enterococci_cfu_100ml,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colors_vec =</span> <span class="st">"Starfish"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"discrete"</span>) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">label_log</span>(),</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">log_breaks</span>()</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sydney Bacteria Distribution by Region"</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Region"</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Enterococci CFU/100mL (Log10)"</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Region"</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">35</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>sydney_entero </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Function_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1344"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"Week_08"</span>,<span class="st">"output"</span>,<span class="st">"sydney_entero.png"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>This worked out better than I expected, however there are still some coding crashes I have encountered while creating this plot function. I realized that with bigger datasets it can get overwheming, and that by changing to specific types of plots would require other changes. The scatter plot did not look as planned, but it did fulfill the idea of being flexible and can be used for other plots. I do strongly suggest to not do this, because if you go down this pathway, it will get messier. Maybe because I made this specifically as a boxplot, it catered to the idea of the boxplot. I think including all the themes is good and all but it did add alot of confusion for me, since the codes got longer and longer. Nevertheless the objective has been achieved, the function is flexible but will need major revisions.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

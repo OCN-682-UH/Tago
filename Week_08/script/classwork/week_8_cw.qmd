@@ -1,0 +1,223 @@
+---
+title: "Week_8"
+author: "Fuamai Tago"
+format: html
+---
+
+```{r}
+df <- tibble(a = rnorm(10),
+             b = rnorm(10),
+             c = rnorm(10),
+             d = rnorm(10))
+
+head(df)
+```
+
+
+```{r}
+df <- df |>
+  mutate (a = (a - min(a, na.rm = TRUE))/(max(a, na.rm = TRUE) - min(a, na.rm = TRUE)))
+
+head(df)
+
+
+```
+
+```{r}
+#does not work bc we did not give it arguments 
+# this is the conversion formula 
+temp_C <- (temp_F - 32) * 5 / 9
+```
+
+
+```{r}
+#create fxn structure 
+f_to_celsius <- function() {
+  # code goes here
+}
+
+#add formula
+f_to_celsius <- function() {
+  temp_C <- (temp_F - 32) * 5 / 9} #
+
+#add argument
+f_to_celsius <- function(temp_F) {
+  temp_C <- (temp_F - 32) * 5 / 9
+}
+
+#add return statement
+f_to_celsius <- function(temp_F) {
+  temp_C <- (temp_F - 32) * 5 / 9
+  return(temp_C)
+}
+
+```
+
+```{r}
+#Test it 
+f_to_celsius(32)
+```
+
+```{r}
+#Test it
+f_to_celsius(212)
+```
+
+```{r}
+#temp_K <- (temp_C + 273.15)
+
+c_to_kelvin <- function(temp_C) { #
+  temp_K <- (temp_C + 273.15)
+  return(temp_K)}
+
+c_to_kelvin(200)
+```
+
+```{r}
+library(palmerpenguins)
+library(PNWColors)
+
+pal <- pnw_palette("Lake",3,type = "discrete")
+
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm, color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_manual("Island", values = pal) +
+  theme_bw()
+```
+
+```{r}
+pal <- pnw_palette("Starfish",3,type = "discrete")
+
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm, color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_manual("Island", values = pal) +
+  theme_bw()
+```
+
+```{r}
+#things to change - make them broad
+#arguments to change is always x and y 
+#maybe the dataframe 
+#maybe even the color
+
+myplot <- function() {
+  pal <- pnw_palette("Lake", 3, type = "discrete")
+  
+  ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm, color = island)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual("Island", values = pal) +
+    theme_bw()
+}
+```
+
+```{r}
+#make it broad
+
+myplot <- function(data, x, y) {
+  pal <- pnw_palette("Lake", 3, type = "discrete")
+  
+  ggplot(penguins, aes(x = x, y = y, color = island)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual("Island", values = pal) +
+    theme_bw()
+}
+
+```
+
+```{r}
+myplot(data = penguins, x = body_mass_g, y = bill_length_mm)
+```
+```{r}
+#using the curly curly {{}} to pass columns
+myplot <- function(data, x, y) {
+  pal <- pnw_palette("Lake", 3, type = "discrete")
+  
+  ggplot(data, aes(x = {{x}}, y = {{y}}, color = island)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual("Island", values = pal) +
+    theme_bw()
+}
+
+myplot(data = penguins, x = body_mass_g, y = bill_length_mm)
+
+```
+```{r}
+myplot(data = penguins, x = body_mass_g, y = flipper_length_mm)
+```
+
+
+```{r}
+#set defaults so users dont have to specify everything 
+#anytime to change dataframe to be specific 
+
+myplot <- function(data = penguins, x, y) {
+  pal <- pnw_palette("Lake", 3, type = "discrete")
+  
+  ggplot(data, aes(x = {{x}}, y = {{y}}, color = island)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual("Island", values = pal) +
+    theme_bw()
+}
+
+#now just only call for the column arguments
+myplot(x = body_mass_g, y = flipper_length_mm)
+```
+```{r}
+#can add ggplot layers using the "+" just like regular plot
+
+myplot(x = body_mass_g, y = flipper_length_mm) +
+  labs(x = "Body mass (g)", y = "Flipper length (mm)")
+```
+```{r}
+#make functions even. ore broad to give users idea to try out something else
+#if-else - use this to execute different code based on condition 
+
+a <- 4
+b <- 5
+
+if (a > b) {
+  f <- 20
+} else {
+  f <- 10
+}
+
+f #condition (a > b) is FALSE so f is assigneed to 10
+#if something is true, then add a line if not, do not add
+
+
+```
+```{r}
+#make fxn more flexible
+
+myplot <- function(data = penguins, x, y, lines = TRUE) {
+  pal <- pnw_palette("Lake", 3, type = "discrete")
+  
+  if (lines == TRUE) {
+    ggplot(data, aes(x = {{x}}, y = {{y}}, color = island)) +
+      geom_point() +
+      geom_smooth(method = "lm") +
+      scale_color_manual("Island", values = pal) +
+      theme_bw()
+  } else {
+    ggplot(data, aes(x = {{x}}, y = {{y}}, color = island)) +
+      geom_point() +
+      scale_color_manual("Island", values = pal) +
+      theme_bw()
+  }
+}
+
+#test with lines 
+#lines are defaulted to TRUE 
+myplot(x = body_mass_g, y = flipper_length_mm)
+```
+```{r}
+#test with no lines
+myplot(x = body_mass_g, y = flipper_length_mm, lines = FALSE)
+```
+

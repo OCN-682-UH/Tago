@@ -1,0 +1,391 @@
+---
+title: "Function: Box Plot Version"
+author: "Fuamai Ativalu Tago"
+date: today
+date-format: long
+title-block-banner: true
+format:
+  html: 
+    toc: true 
+    toc-depth: 3
+    code-fold: true
+    code-summary: "show code"
+    theme: 
+      light: cosmo
+execute:
+  warning: false
+  message: false
+---
+# Introduction 
+
+This report will cover what we have learned in class: _developing our own functions_. The primary purpose of creating functions is to automate repetitive tasks-such as cleaning multiple dataframes, using the same plot to observe the correlations, or to simply run your script- while minimizing copy-paste errors when duplicating the code chunks. It will also help the data be organized, readable and reusable.
+
+To see whether the functions are successful, it should follow the four-part anatomy: 
+
+1. **Function name** - describes what the function does (choose a good descriptive name)
+2. **Arguments** - the input slot that lists the multiple arguments 
+3. **Function body** - places code inside the **{}** (curly curly blocks) to execute the task
+4. **Return Statement** - the final output sent back to reader or viewer
+
+In this report we will use the penguins dataset to develop the two useful functions, but will test its flexibility using the water quality data from Sydney (download from tidy tuesday). The objectives are:
+
+1. Creating a summary table that identifies and excludes the outliers, along with making it publication-quality ready table
+2. Create a  visual boxplot ~ lets visualize the data distribution and compare groups. 
+
+## Loading libraries 
+```{r}
+#load libraries
+
+library(tidyverse)
+library(here)
+library(readr)
+library(palmerpenguins)
+library(PNWColors)
+library(kableExtra)
+library(tidyr)
+library(scales)
+
+#import dataset 
+write.csv(penguins,here("Week_08", "data", "penguins.csv"))
+
+glimpse(penguins)
+
+water_quality <- read_csv(here("Week_08","data","water_quality.csv"))
+
+```
+# Objective 1: Create a Summary Table 
+
+This is a very important portion with regards to cleaned data prior to making the boxplot. Instead of repetitively trying to create clean summary tables, we can use this function to generate cleaner tables for any dataframe that is being prepped for boxplot. 
+
+```{r}
+#generate the clean summary table with kable to make it cleaner 
+
+clean_table <- function(data, group, value, type = "html", custom_cols = NULL) { if(is.null(custom_cols)) {
+      group_name <- str_to_title(gsub("_", "", deparse(substitute(group)))) 
+      custom_cols <- c(group_name, "Sample Size","Mean",
+                       "Median", "Max")
+    }
+  data |>
+  filter(!is.na({{value}}), !is.na({{group}})) |>
+  group_by({{group}})|>
+  summarize( sample = n(),
+             mean = mean({{value}}),
+             median = median({{value}}),
+             max = max ({{value}}),
+             .groups = "drop") |>
+  arrange(desc(mean)) |>
+  kbl(align = "c", digits = 2) |>
+  kable_styling(
+    bootstrap_options = c("striped","hover","condensed"),
+    full_width = FALSE, position = "center") |>
+  row_spec(0, bold = TRUE, color = "aliceblue", background = "#2D3748")
+}
+```
+
+Now that the code is being developed let's try and practice with both the penguin data as a test and water quality data as the flexibility test. 
+
+## Testing with Penguin data frame 
+```{r}
+penguin_table <- clean_table(penguins, species, flipper_length_mm)
+
+penguin_table
+```
+
+## Testing with Water Quality Dataframe
+
+It works!! Lets try with the water quality data. 
+
+```{r}
+entero_summary <- clean_table(water_quality, swim_site, enterococci_cfu_100ml)
+
+entero_summary
+
+```
+
+```{r}
+#testing part 2
+
+temp_summary <- clean_table(water_quality, swim_site, water_temperature_c)
+
+temp_summary 
+
+```
+
+Clearly the two dataframes differ greatly, since the water quality dataset is very large compared to the penguin dataset. However, the function did achieve the flexibility challenge, and it still needs more work to make it publishable. 
+
+# Objective 2: Create Boxplot
+
+The idea for this function was to make sure everything is included, the theme, the filtering, the colors. This was to make sure my life would be super super easy, since I plan to use this function alot for my projects. 
+
+```{r}
+box_color <- function(data, group, value, colors_vec, n, type) {
+  data |>
+    filter(!is.na({{ group }}), !is.na({{ value }})) |>
+    ggplot(aes(x = factor({{ group}}), y = {{ value }}, fill = factor({{ group}}))) +
+    geom_boxplot(alpha = 0.8, outlier.color = "#e74c3c") +
+    scale_fill_manual(values = pnw_palette(name = colors_vec, n = n, type = type)) +
+    theme_minimal(base_size = 14) +
+    theme(plot.title = element_text(face = "bold", 
+                                  size = 14),
+        axis.text.x = element_text(face = "plain"),
+        axis.text.y = element_text(face = "plain"),
+        axis.line = element_line(color = "black",
+                                 linewidth = 0.6),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank())
+}
+
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+#testing 1
+penguin_flipper <- box_color(data = penguins,
+                             group = species,
+                             value = flipper_length_mm,
+                             colors_vec = "Starfish",
+                             n = 3,
+                             type = "continuous") + 
+  labs(title = "Species Flippers",
+       x = "Penguin Species",
+       y = "Flipper Length (mm)",
+       fill = "Species")
+  
+
+penguin_flipper
+
+ggsave(here("Week_08","output","penguin_flipper.png"))
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+#testing 2
+penguin_bill <- box_color(data = penguins,
+                          group = species,
+                          value = bill_length_mm,
+                          colors_vec = "Bay",
+                          n = 3,
+                          type = "discrete") +
+  labs(title = "Comparison of Bill Length (mm), across Penguin Species",
+       x = "",
+       y = "Bill Length (mm)",
+       fill = "Species")
+
+penguin_bill
+
+ggsave(here("Week_08","output","penguin_bill.png"))
+```
+
+In addition to developing this function, my hope was to make sure that this function can be easy to change plots. Everything in the function stays the same, except the type of plot and codes that relate to the plot. So in this code, I changed to a violin plot and it worked out well. However, lets try using a scatter plot. 
+
+```{r}
+
+violin_color<- function(data, group, value, colors_vec, n, type) {
+  data |>
+    filter(!is.na({{ group }}), !is.na({{ value }})) |>
+    ggplot(aes(x = factor({{ group}}), y = {{ value }}, fill = factor({{ group}}))) +
+    geom_violin(alpha = 0.8, color = "black", linewidth = 0.4, draw_quantiles = c(0.25, 0.5, 0.75)) + #used geom violin for bigger stretch 
+    scale_fill_manual(values = pnw_palette(name = colors_vec, n = n, type = type)) +
+    theme_minimal(base_size = 14) +
+    theme(plot.title = element_text(face = "bold", 
+                                  size = 14),
+        axis.text.x = element_text(face = "plain"),
+        axis.text.y = element_text(face = "plain"),
+        axis.line = element_line(color = "black",
+                                 linewidth = 0.6),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank())
+}
+
+```
+
+##Testing Flexibility
+
+```{r}
+sydney_entero_violin <-violin_color(data = water_quality,
+                             group = region,
+                             value = enterococci_cfu_100ml,
+                             n = 5,
+                             colors_vec = "Starfish",
+                             type = "discrete") +
+  scale_y_log10(
+    labels = label_log(),
+    breaks = log_breaks()
+  ) +
+  labs(
+    title = "Sydney Bacteria Distribution by Region",
+    x = "Region",
+    y = "Enterococci CFU/100mL (Log10)",
+    fill = "Region"
+  ) +
+  geom_hline(yintercept = 35, linetype = "dashed", color = "darkred", linewidth = 0.8) +
+  coord_flip()
+  
+
+sydney_entero_violin 
+
+ggsave(here("Week_08","output","sydney_entero_violin.png"))
+```
+
+```{r}
+jitter_color<- function(data, group, value, colors_vec, n, type) {
+  data |>
+    filter(!is.na({{ group }}), !is.na({{ value }})) |>
+    ggplot(aes(x = factor({{ group}}), y = {{ value }}, color = factor({{ group}}))) + #changed fill to color so data can be colored 
+    geom_jitter(alpha = 0.4,size = 1.2, width = 0.2, height = 0) + #lowered alpha to make cluster spots
+    scale_fill_manual(values = pnw_palette(name = colors_vec, n = n, type = type)) +
+    theme_minimal(base_size = 14) +
+    theme(plot.title = element_text(face = "bold", 
+                                  size = 14),
+        axis.text.x = element_text(face = "plain"),
+        axis.text.y = element_text(face = "plain"),
+        axis.line = element_line(color = "black",
+                                 linewidth = 0.6),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank())
+}
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 14
+#| fig-height: 14
+
+sydney_entero_jitter <-jitter_color(data = water_quality,
+                             group = region,
+                             value = enterococci_cfu_100ml,
+                             n = 5,
+                             colors_vec = "Starfish",
+                             type = "discrete") +
+  scale_y_log10(
+    labels = label_log(),
+    breaks = log_breaks()
+  ) +
+  labs(
+    title = "Sydney Bacteria Distribution by Region",
+    x = "Region",
+    y = "Enterococci CFU/100mL (Log10)",
+    color = "Region")
+
+
+sydney_entero_jitter
+
+ggsave(here("Week_08","output","sydney_entero_jitter.png"))
+```
+
+```{r}
+scatter_color<- function(data, value_x, value_y, group, colors_vec, n, type) {
+  data |>
+    filter(!is.na({{ value_x }}), !is.na({{ value_y }}), !is.na({{ group }}), {{value_x}} < 40) |> 
+    ggplot(aes(x = {{ value_x}}, y = {{ value_y}}, color = factor({{ group}}))) + #changed fill to color so data can be colored 
+    geom_point(alpha = 0.2, size = 1.2) + #changed to correlation plot
+    geom_smooth(
+      method = "lm", 
+      aes(group = 1), #find one correlation across all data
+      color = "#2D3748", 
+      linewidth = 1.2, 
+      se = TRUE) +
+    scale_color_manual(values = pnw_palette(name = colors_vec, n = n, type = type)) + #changed the fill to scale color to match point 
+    theme_minimal(base_size = 14) +
+    theme(plot.title = element_text(face = "bold", 
+                                  size = 14),
+        axis.text.x = element_text(face = "plain"),
+        axis.text.y = element_text(face = "plain"),
+        axis.line = element_line(color = "black",
+                                 linewidth = 0.6),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank())
+}
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 14
+#| fig-height: 14
+
+sydney_entero_scatter <-scatter_color(data = water_quality,
+                                      value_x = water_temperature_c,
+                                      value_y = enterococci_cfu_100ml,
+                                      group = region,
+                             n = 5,
+                             colors_vec = "Starfish",
+                             type = "discrete") +
+  scale_y_log10(
+    labels = label_log(),
+    breaks = log_breaks()
+  ) + xlim(10, 30) +
+  labs(
+    title = "Sydney Bacteria Concentrations vs Water Temperature by Region",
+    x = "Water Temperacture (C)",
+    y = "Enterococci CFU/100mL (Log10)",
+    color = "Region")
+
+
+sydney_entero_scatter
+
+ggsave(here("Week_08","output","sydney_entero_scatter.png"))
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 14
+#| fig-height: 14
+
+
+sydney_entero <-box_color(data = water_quality,
+                             group = region,
+                             value = enterococci_cfu_100ml,
+                             n = 5,
+                             colors_vec = "Starfish",
+                             type = "discrete") +
+  scale_y_log10(
+    labels = label_log(),
+    breaks = log_breaks()
+  ) +
+  labs(
+    title = "Sydney Bacteria Distribution by Region",
+    x = "Region",
+    y = "Enterococci CFU/100mL (Log10)",
+    fill = "Region"
+  ) +
+  geom_hline(yintercept = 35, linetype = "dashed", color = "darkred", linewidth = 0.8)
+  
+
+sydney_entero 
+
+ggsave(here("Week_08","output","sydney_entero.png"))
+```
+This worked out better than I expected, however there are still some coding crashes I have encountered while creating this plot function. I realized that with bigger datasets it can get overwheming, and that by changing to specific types of plots would require other changes. The scatter plot did not look as planned, but it did fulfill the idea of being flexible and can be used for other plots. I do strongly suggest to not do this, because if you go down this pathway, it will get messier. Maybe because I made this specifically as a boxplot, it catered to the idea of the boxplot. I think including all the themes is good and all but it did add alot of confusion for me, since the codes got longer and longer. Nevertheless the objective has been achieved, the function is flexible but will need major revisions.
+
+
+
+
+
+
