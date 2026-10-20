@@ -1,0 +1,12 @@
+name: function
+title: Function
+username: fuamaiatago
+account: fuamaiatago
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a15b6b-10dc-195c-e5ce-65d61f33f794
+bundleId:
+url: https://connect.posit.cloud/fuamaiatago/content/01a15b6b-10dc-195c-e5ce-65d61f33f794
+version: 1
+asMultiple: FALSE
+asStatic: TRUE

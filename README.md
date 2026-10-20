@@ -52,7 +52,11 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Script](https://github.com/OCN-682-UH/Tago/tree/main/good_bad_plot/script)
 * [Quarto](https://01a1480d-fc80-df5e-96ef-c5d63d384696.share.connect.posit.cloud)
 
-
+**Week 8** 
+* [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_08/data)
+* [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_08/output)
+* [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_08/script)
+* [Quarto](https://01a15b6b-10dc-195c-e5ce-65d61f33f794.share.connect.posit.cloud)
 
 
 
