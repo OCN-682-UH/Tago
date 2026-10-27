@@ -59,10 +59,10 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Quarto](https://01a15b6b-10dc-195c-e5ce-65d61f33f794.share.connect.posit.cloud)
 
 **Week 9** 
-* [Data]()
-* [Output]()
-* [Script]()
-* [Quarto]()
+* [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_09/data)
+* [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_09/output)
+* [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_09/script)
+* [Quarto](https://01a17f49-5c8d-c75b-ecc7-cc47bd3d0c8c.share.connect.posit.cloud)
 
 
 
