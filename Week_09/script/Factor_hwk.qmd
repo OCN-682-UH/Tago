@@ -1,0 +1,187 @@
+---
+title: "Intertidal Factor Homework"
+author: "Fuamai Tago"
+date: today
+date-format: long
+title-block-banner: true
+format:
+  html:
+    toc: true 
+    toc-depth: 3
+    code-fold: true
+    code-summary: "show code"
+    theme:
+      dark: cosmo
+execute:
+  warning: false
+  message: false
+---
+# Introduction
+
+This homework report will focus on utilizing the factor function. Using the rocky intertidal data along the US Pacific Coast (Starfish Point to Scripps), the goal of this homework is to:
+
+1. String clean the data 
+2. Make a plot where at least one axis is a factor in a meaningful order.
+
+I have two questions that the plot should look at:
+
+1. Observe the distribution of the small barnacle (% cover) across the different tide zones (Low > Mid > High) in order. 
+2. Observe the average small barnacle abundance across all sites
+
+## Load the Library
+
+```{r}
+#load the library
+
+library(here) 
+library(tidyverse) #also has the stringr package functions that is necessary for cleaning the quadrat columns
+library(forcats) #contains the factor functions 
+library(ggplot2) #helps us visualize the data 
+library(janitor) #cleans the data for visualization 
+library(PNWColors) #load color palette
+```
+## Load the Data
+
+We will be using both the intertidal data and the intertidal latitude datasets. This can be done by using the _"read_csv"_ function. Uisng this function instead of the _"read.csv"_ allows us to view the orginal dataset, where the strings are characters.  
+
+```{r}
+#load the data 
+intertidal <- read_csv(here("Week_09", "data", "intertidaldata.csv"))
+intertidal
+
+sort(unique(intertidal$Quadrat))
+glimpse(intertidal)
+
+latitude <- read_csv(here("Week_09","data","intertidaldata_latitude.csv"))
+latitude
+
+glimpse(latitude)
+
+```
+## Clean the Data Using **{janitor}**
+
+The janitor function allows for quick data cleaning, making it ready for data analysis or visualization. In this code chunk, we want to use this function to clean the messy and dirty data. We are going to clean names by using the _clean_names ()_.
+
+```{r}
+#clean names of the messy data 
+intertidal_name <- intertidal |> clean_names()
+latitude_name <- latitude |> clean_names()
+
+names(intertidal_name)
+names(latitude_name)
+```
+```{r}
+#cleans the names that we couldnt clean with the previous function
+# ".x and [1.]"  acts as the placeholder for the columns that are being processed targeting the number 1 and the period
+#str_to_title: standardizes the lowercase strings, fixes messy casing and capitalization
+#str_squish: cleans up the messy spaces
+#str_remove_all: removes any instance of those speciic texts, characters, pattern or punctuation 
+#after the cleaning process, we convert the quadrat into factor = levels to make it meaningful for tide heights: Low > Mid > High 
+
+intertidal_clean <- intertidal_name |>
+  mutate(across(quadrat, ~str_to_title(str_squish(str_remove_all(.x, "[1.]"))))) |>
+  mutate(quadrat = factor(quadrat, levels = c("Low","Mid","High")))
+
+unique(intertidal_clean$quadrat)
+
+```
+
+## Join the Two Datasets (latitude and intertidal)
+
+Both have sites as characters so we can left_join the latitude to the intertidal cleaned data. 
+
+```{r}
+#joining the latitude and the intertidal date by "site"
+#use this data for visualization
+intertidal_lat <- intertidal_clean |>
+  left_join(latitude_name, by = "site") |>
+  mutate(site = fct_reorder(site, latitude)) #reorder sites by latitudes
+
+unique(intertidal_lat$quadrat) #check the quadrat name if renamed
+levels(intertidal_lat$site)
+```
+The new combined dataset has `r nrow(intertidal_lat)` observations after the cleaning process. Now we move forward with visualizing the plot. 
+
+# Data Visualization 
+
+```{r}
+#| label: fig-tide
+#| fig-cap: "Looking at the distribution of small barnacles across the different tide heights observed along the US Pacific Coast. The x-axis shows the tide heights in order (Low > Mid > High), while the y-axis shows the percent cover of the small barnacles."
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(intertidal_lat, aes(x = quadrat, 
+                           y = small_barnacles, 
+                           fill = quadrat)) +
+  geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+  scale_fill_manual(values = c(Low = "#628c62", 
+                               Mid = "#97d9c7", 
+                               High = "#ef5554")) +
+  labs(title = "Small Barnacles Distribution Across Tide Zones",
+       subtitle = "Percent cover of small barnacles by tides across all sites along the US Pacific Coast.",
+       x = "Tide Zone",
+       y = "Small Barnacles Cover (%)",
+       fill = "Tide Zone") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold",size = 20),
+        plot.title.position = "panel",
+        plot.subtitle = element_text(size = 13, color = "grey45"),
+        plot.background = element_rect(),
+        axis.text = element_text(face = "plain",size = 11),
+        axis.title = element_text(face = "bold", size = 11),
+        legend.position = "right")
+
+ggsave(here("Week_09", "output", "intertidal_barnacle.png"))
+```
+
+@fig-tide shows that the small barnacles are mostly found during the high tides across all sites. High tide is ecologically important for these barnacles, because they are safe from predators, and there is no competition for space. In the low tide zones, the small barnacles have low distribution because there is more predatory accessibility and there are more organisms competing for space. 
+
+Lets look at this from a site perspective and see the abundance of the small barnacles across the US Pacific coastal intertidal zones.
+
+```{r}
+barnacle_site_avg <- intertidal_lat |>
+  group_by(site, quadrat) |>
+  summarise(barnacle_avg = mean(small_barnacles, 
+                                na.rm = TRUE),
+            latitude = first(latitude), #keeps latitude in data
+            .groups = "drop") #
+
+barnacle_site_avg
+```
+```{r}
+#| label: fig-site
+#| fig-cap: "Geographical trends across the US Pacific coastal intertidal sites reveal that small barnacle densities are highly observed at intertidal sites: Starfish Point, Shell Beach, and Dana Point."
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(barnacle_site_avg, aes(x = fct_reorder (site, latitude,
+                                               .desc = TRUE), #fct_reorder to reorder the sites from N > S
+                           y = barnacle_avg, 
+                           color = quadrat,
+                           group = quadrat)) +
+  geom_line(linewidth = 1.5) +
+  geom_point(size = 4, alpha = 0.7) +
+  scale_color_manual(values = c(Low = "#628c62", 
+                               Mid = "#97d9c7", 
+                               High = "#ef5554")) +
+  labs(title = "Small Barnacles Average Percent Cover Across Intertidal Sites",
+       subtitle = "Sites ordered geographically from North to South",
+       x = "Site",
+       y = "Average Percent Cover of Small Barnacles",
+       color = "Tide Zone (Quadrat)") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold",size = 17),
+        plot.title.position = "panel",
+        plot.subtitle = element_text(size = 13, color = "grey45"),
+        plot.background = element_rect(),
+        axis.text = element_text(face = "plain",size = 11),
+        axis.text.x = element_text(angle = 40, hjust = 1),
+        axis.title = element_text(face = "bold", size = 11),
+        legend.position = "top")
+
+ggsave(here("Week_09", "output", "site_barnacle.png"))
+```
+
+@fig-site shows an interesting geographical trend where small barnacle abundance are highly observed in Starfish Point the northern intertidal site, and at Shell Beach and Dana Point the southern intertidal site. These are all data collected during the high tide zones, highlighting that small barnacles favor these site due to high influxes of waves from the open ocean carrying tiny barnacle larvaes allowing them to thrive in these areas. In addition, Dana Point has dense mussel beds that provides protection for the small barnacles, while Starfish Point has the predators that favor mussel more than small barnacles.
+
+
