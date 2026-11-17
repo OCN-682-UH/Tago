@@ -65,10 +65,9 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Quarto](https://01a17f49-5c8d-c75b-ecc7-cc47bd3d0c8c.share.connect.posit.cloud)
 
 **Week 12**
-* [Data]()
-* [Output]()
-* [Script]()
-* [Quarto]()
+* [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_12/Data)
+* [Script](https://github.com/OCN-682-UH/Tago/tree/main/Week_12/Script)
+* [Shiny App](https://01a1eb85-9174-41a8-55d2-fe7c8e92957e.share.connect.posit.cloud)
 
 
 
