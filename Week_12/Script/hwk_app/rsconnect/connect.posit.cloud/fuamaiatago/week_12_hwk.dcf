@@ -1,0 +1,12 @@
+name: week_12_hwk
+title: Week_12_hwk
+username: fuamaiatago
+account: fuamaiatago
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1eb85-9174-41a8-55d2-fe7c8e92957e
+bundleId:
+url: https://connect.posit.cloud/fuamaiatago/content/01a1eb85-9174-41a8-55d2-fe7c8e92957e
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
