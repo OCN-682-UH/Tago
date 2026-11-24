@@ -94,7 +94,7 @@ for (i in seq_along(files)) {
   #using dataframe set up prior 
   #looking for mean and standard deviation for both Temp and Intensity 
   oregon_results$filename[i] <- basename(files[i]) #Extract a file name from a full path
-  oregon_results$pool[i] <- factor(raw_data$PoolID[1]) #pool for this file
+  oregon_results$pool[i] <- factor(raw_data$PoolID[i]) #pool for this file
   oregon_results$mean_temp[i] <- mean(raw_data$Temp.C, na.rm = TRUE)
   oregon_results$mean_intensity[i] <- mean(raw_data$Intensity.lux, na.rm = TRUE)
   oregon_results$std_temp[i] <- sd(raw_data$Temp.C,na.rm = TRUE)
