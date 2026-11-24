@@ -70,8 +70,8 @@ It is organized by assignment and week to help me stay organized and, hopefully,
 * [Shiny App](https://01a1eb85-9174-41a8-55d2-fe7c8e92957e.share.connect.posit.cloud)
 
 **Week 13**
-* [Data]()
-* [Script]()
-* [Output]()
-* [Quarto]()
+* [Data](https://github.com/OCN-682-UH/Tago/tree/main/Week_13/data/hwk_data)
+* [Script](https://github.com/OCN-682-UH/Tago/blob/main/Week_13/script/interative_coding_hwk.qmd)
+* [Output](https://github.com/OCN-682-UH/Tago/tree/main/Week_13/output)
+* [Quarto](https://01a20f3e-a403-3629-5727-c36157e6d1ae.share.connect.posit.cloud)
 
